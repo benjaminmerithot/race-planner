@@ -187,13 +187,16 @@ function p0(q) { return q.x >= 0 && q.y >= 0 && q.x <= W && q.y <= H; }
 const reg = JSON.parse(fs.readFileSync('reg.json')); // hand-entered key dates
 // Next registration date for races RunSignup lists, unless reg.json already has
 // dates for that race (hand-entered rows win). One row per race, the next one:
-// opening day, the last day before a price rise, or an early close.
+// opening day, the last day before a price rise, or an early close. Only for
+// curated races and races with a known field size, or the feed drowns.
 const handReg = new Set(reg.map(g => g.id));
 const inPage = new Set(races.map(q => q.id));
 const usd = n => '$' + (Number.isInteger(n) ? n : n.toFixed(2));
 for (const [id, x] of rsuOf) {
   if (handReg.has(id) || !inPage.has(id)) continue;
   const race = races.find(q => q.id === id);
+  // keep the Key dates feed readable: curated races and races with a known field size
+  if (race.id.match(/^[rfh]-/) && !(race.fin || race.wk)) continue;
   const ev = x.events.find(e => e.d === (x.dists.includes('full') ? 'full' : 'half'));
   const ps = (ev.periods || []).filter(pp => pp.opens && pp.closes).sort((a, b) => a.opens.localeCompare(b.opens));
   const rows = [];
