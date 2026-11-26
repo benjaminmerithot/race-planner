@@ -63,7 +63,8 @@ const geocode = (city, st) => {
   const c = cities.filter(x => x.country === 'US' && x.adminCode === st && x.name.toLowerCase() === city.toLowerCase()).sort((a, b) => b.population - a.population)[0];
   return c ? [c.loc.coordinates[1], c.loc.coordinates[0]] : null;
 };
-const TODAY = '2026-11-26';
+// Dates before this roll forward a year. Set BUILD_DATE to reproduce an old build.
+const TODAY = process.env.BUILD_DATE || new Date().toLocaleDateString('en-CA', { timeZone: 'America/New_York' });
 const iso = d => d.toISOString().slice(0, 10);
 const rollForward = s => { let d = new Date(s + 'T12:00:00Z'); let rolled = false; while (iso(d) < TODAY) { d = new Date(d.getTime() + 364 * 864e5); rolled = true; } return [iso(d), rolled]; };
 const PROF = { 'Very Flat': [1, 'Flat'], 'Mostly Flat': [1, 'Mostly flat'], 'Downhill': [2, 'Net downhill'], 'Rolling Hills': [2, 'Rolling'], 'Hilly': [4, 'Hilly'], 'Very Hilly': [5, 'Very hilly'] };
@@ -112,26 +113,7 @@ console.log('imported', imported.length, 'unmatched', JSON.stringify(unmatched))
 const DEMAND = JSON.parse(fs.readFileSync('demand.json'));
 const races = [...curated, ...imported].map(q => { const p = q.region === 'HI' ? hiProj([q.lon, q.lat]) : q.region === 'AK' ? akProj([q.lon, q.lat]) : proj([q.lon, q.lat]); const dm = DEMAND[q.id] || {}; return { ...q, dem: dm.lvl || '', demNote: dm.note || '', wk: dm.wk || 0, x: r(p[0]), y: r(p[1]) }; }).filter(q => p0(q));
 function p0(q) { return q.x >= 0 && q.y >= 0 && q.x <= W && q.y <= H; }
-const reg = [
-  ['bayshore', '2026-12-01', 'Registration opens', 0],
-  ['monument10k', '2026-12-01', 'Price increases after today', 0],
-  ['baa10k', '2027-03-17', 'Registration opens', 1],
-  ['equinox', '2027-04-20', 'Registration opens', 1],
-  ['pittsburgh', '2027-01-15', 'Price increase (was Jan 15 for 2026)', 1],
-  ['nyc', '2027-03-03', 'Drawing day: results by email', 1],
-  ['flyingpig', '2027-04-28', 'Registration closes', 0],
-  ['chicago', '2026-12-08', 'Drawing results by email', 0],
-  ['chicago', '2026-12-15', 'Drawing entries must be paid', 0],
-  ['detroit', '2027-01-01', 'Registration opens; sold out in days in 2026', 1],
-  ['nyc', '2027-02-03', 'Drawing application opens', 1],
-  ['nyc', '2027-02-24', 'Drawing application closes', 1],
-  ['twincities', '2027-03-02', 'Registration reopens', 0],
-  ['peachtree', '2027-04-01', 'Lottery window opens (runs all April)', 1],
-  ['mcm', '2027-04-05', 'Registration opens; sells out fast', 1],
-  ['grandmas', '2027-09-30', '2028 registration opens', 1],
-  ['boston', '2027-09-13', '2028 qualifier registration week', 1],
-  ['chicago', '2027-10-07', '2028 application window opens', 1]
-].map(([id, d, label, est]) => ({ id, d, label, est: !!est }));
+const reg = JSON.parse(fs.readFileSync('reg.json')); // hand-entered key dates
 
 const geo = {
   W, H,
@@ -139,6 +121,9 @@ const geo = {
   hi: round(hiPath(hiFeat)), hiBox, ak: round(akPath(akFeat)), akBox
 };
 fs.writeFileSync('data.js', 'const GEO=' + JSON.stringify(geo) + ';\nconst RACES=' + JSON.stringify(races) + ';\nconst REG=' + JSON.stringify(reg) + ';\n');
+const tpl = fs.readFileSync('template.html', 'utf8');
+const data = fs.readFileSync('data.js', 'utf8');
+fs.writeFileSync('index.html', tpl.replace('/*DATA*/', () => data));
 console.log('data.js', (fs.statSync('data.js').size / 1024).toFixed(0), 'KB', races.length, 'races');
 const off = races.filter(x => x.x < 0 || x.x > W || x.y < 0 || x.y > H);
 console.log('off-map:', off.map(x => x.id));

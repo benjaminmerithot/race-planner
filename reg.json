@@ -1,0 +1,20 @@
+[
+{"id":"bayshore","d":"2026-12-01","label":"Registration opens","est":false},
+{"id":"monument10k","d":"2026-12-01","label":"Price increases after today","est":false},
+{"id":"baa10k","d":"2027-03-17","label":"Registration opens","est":true},
+{"id":"equinox","d":"2027-04-20","label":"Registration opens","est":true},
+{"id":"pittsburgh","d":"2027-01-15","label":"Price increase (was Jan 15 for 2026)","est":true},
+{"id":"nyc","d":"2027-03-03","label":"Drawing day: results by email","est":true},
+{"id":"flyingpig","d":"2027-04-28","label":"Registration closes","est":false},
+{"id":"chicago","d":"2026-12-08","label":"Drawing results by email","est":false},
+{"id":"chicago","d":"2026-12-15","label":"Drawing entries must be paid","est":false},
+{"id":"detroit","d":"2027-01-01","label":"Registration opens; sold out in days in 2026","est":true},
+{"id":"nyc","d":"2027-02-03","label":"Drawing application opens","est":true},
+{"id":"nyc","d":"2027-02-24","label":"Drawing application closes","est":true},
+{"id":"twincities","d":"2027-03-02","label":"Registration reopens","est":false},
+{"id":"peachtree","d":"2027-04-01","label":"Lottery window opens (runs all April)","est":true},
+{"id":"mcm","d":"2027-04-05","label":"Registration opens; sells out fast","est":true},
+{"id":"grandmas","d":"2027-09-30","label":"2028 registration opens","est":true},
+{"id":"boston","d":"2027-09-13","label":"2028 qualifier registration week","est":true},
+{"id":"chicago","d":"2027-10-07","label":"2028 application window opens","est":true}
+]

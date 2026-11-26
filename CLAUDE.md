@@ -8,13 +8,14 @@ A single-page race planner for the US and Canada: map, filters, registration and
 races.json      curated races (~100), hand-researched: dates, temps, difficulty, status, links
 fulls.txt       every US/CA marathon from FindMyMarathon (name|city|state|MM/DD/YYYY|profile|finishers)
 halves.txt      half marathons (date|name|city|st|dists|est|note), only partly complete
+reg.json        hand-entered key dates (openings, lotteries, deadlines) for the registration feed
 demand.json     per-race demand level, note and 2025 weekend size (RunSignup Top 100)
 manual-geo.json lat/lon overrides for towns the geocoders miss
 build.mjs       merges everything, geocodes (zipcodes + all-the-cities), dedupes, projects to SVG coords, writes data.js
 template.html   the whole UI; build step injects data.js at /*DATA*/ to produce index.html
 ```
 
-Build: `npm install && node build.mjs && python3 -c "t=open('template.html').read();open('index.html','w').write(t.replace('/*DATA*/',open('data.js').read()))"`
+Build: `npm ci && node build.mjs` (writes data.js and injects it into index.html). Set `BUILD_DATE=YYYY-MM-DD` to reproduce an older build; it defaults to today in US Eastern time.
 
 Map geometry is pre-projected at build time (world-atlas, us-atlas, @geo-maps/earth-lakes-10km), with Alaska and Hawaii insets. The page has no runtime network calls.
 
