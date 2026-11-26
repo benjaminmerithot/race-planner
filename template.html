@@ -52,6 +52,7 @@ main{padding:22px max(4vw,16px) 36px}
 .side .f2 .chip{justify-content:center}
 .checks{border:0;margin:0;padding:0}
 .mfield b{font-weight:600;color:var(--ink);margin-left:4px}
+.cov{display:block;font-weight:500;font-size:11px;line-height:1.3;color:var(--mute);margin-top:-2px}
 .mrange{position:relative;height:26px;margin:2px 0 0}
 .mtrack{position:absolute;left:9px;right:9px;top:11px;height:4px;border-radius:2px;background:var(--line)}
 .mfill{position:absolute;top:0;bottom:0;border-radius:2px;background:var(--ink)}
@@ -211,7 +212,7 @@ td.num{text-align:right}
       <div class="fs mfield" role="group" aria-label="Months"><span>When <b id="mOut">Any month</b></span><div class="mrange"><div class="mtrack"><div class="mfill" id="mFill"></div></div><input type="range" id="mLo" min="0" max="0" step="1" value="0" aria-label="From month"><input type="range" id="mHi" min="0" max="0" step="1" value="0" aria-label="To month"></div><div class="mends"><span id="mFirst"></span><span id="mLast"></span></div></div>
       <label class="fs">Course <select id="fCourse"><option value="any">Any course</option><option value="fast">Flat or fast (1–2)</option><option value="mod">Moderate (3)</option><option value="hard">Hilly (4–5)</option><option value="rated">Rated courses only</option></select></label>
       <label class="fs">Popularity <select id="fPop"><option value="0">Any</option><option value="2">2+ dots</option><option value="3">3+ dots</option><option value="4">4+ dots (major races)</option></select></label>
-      <label class="fs">Entry <select id="fEntry"><option value="any">Any</option><option value="open">Open entry (no lottery or sell-out)</option><option value="hard">Lottery, qualifier or sells out</option></select></label>
+      <label class="fs">Entry <select id="fEntry"><option value="any">Any</option><option value="open">No lottery or sell-out reported</option><option value="hard">Lottery, qualifier or sells out</option></select></label>
       <fieldset class="fs checks" id="fTemp"><legend>Race-morning temp</legend><div class="cl"><label><input type="checkbox" value="cold">Cold (under 40°F)</label><label><input type="checkbox" value="cool">Cool (40°F to 54°F)</label><label><input type="checkbox" value="mild">Mild (55°F to 64°F)</label><label><input type="checkbox" value="warm">Warm (65°F and up)</label><label><input type="checkbox" value="none">No typical temp yet</label></div></fieldset>
       <label class="fs">Field size <select id="fSize"><option value="0">Any</option><option value="500">500+</option><option value="2000">2,000+</option><option value="10000">10,000+</option></select></label>
       <button class="chip" id="f-hideso" aria-pressed="false">Hide sold out</button>
@@ -573,6 +574,22 @@ const setMonths=(lo,hi,src)=>{const L=$('#mLo'),H=$('#mHi');if(lo>hi){if(src===H
   st.mons=full?new Set():new Set(MS.slice(lo,hi+1))};
 ['#mLo','#mHi'].forEach(id=>{$(id).max=MS.length-1});$('#mFirst').textContent=mName(MS[0]);$('#mLast').textContent=mName(MS[MS.length-1]);setMonths(0,MS.length-1);
 ['#mLo','#mHi'].forEach(id=>$(id).addEventListener('input',e=>{setMonths(+$('#mLo').value,+$('#mHi').value,e.target);hideTip();render()}));
+/* data coverage: most imported races have no course rating, size or demand data, so each filter says how many races it can judge, and each option how many races it matches */
+{const U=RACES.filter(upcoming),T=U.length,n=f=>U.filter(f).length,pc=k=>k&&k<T?' ('+Math.max(1,Math.round(k/T*100))+'%)':'',fN=fmtN;
+ const cov=(el,text)=>{const sm=document.createElement('small');sm.className='cov';sm.textContent=text;el.tagName==='SELECT'?el.before(sm):el.querySelector('legend').after(sm)};
+ const cnt=(sel,fns)=>[...$(sel).options].forEach(o=>{if(fns[o.value])o.text+=' · '+fN(n(fns[o.value]))});
+ const rated=n(r=>r.diff>0),pop=n(r=>POP(r)>0),dem=n(r=>!!r.dem||soldOut(r)),size=n(r=>SIZE(r)>0),temp=n(r=>!!r.temp);
+ cov($('#fCourse'),'Rated for '+fN(rated)+' of '+fN(T)+' races'+pc(rated)+'. Unrated races only show under Any course.');
+ cnt('#fCourse',{fast:r=>r.diff>=1&&r.diff<=2,mod:r=>r.diff===3,hard:r=>r.diff>=4,rated:r=>r.diff>0});
+ cov($('#fPop'),'Size or demand known for '+fN(pop)+' of '+fN(T)+pc(pop)+'. Others only show under Any.');
+ cnt('#fPop',{2:r=>POP(r)>=2,3:r=>POP(r)>=3,4:r=>POP(r)>=4});
+ cov($('#fEntry'),'Demand tracked for '+fN(dem)+' of '+fN(T)+' races'+pc(dem)+'. Untracked races count as none reported.');
+ cnt('#fEntry',{open:r=>!['lottery','qualify','fast','soldout'].includes(r.dem)&&!soldOut(r),hard:r=>['lottery','qualify','fast','soldout'].includes(r.dem)});
+ cov($('#fSize'),'Field size known for '+fN(size)+' of '+fN(T)+pc(size)+'.');
+ cnt('#fSize',{500:r=>SIZE(r)>=500,2000:r=>SIZE(r)>=2000,10000:r=>SIZE(r)>=10000});
+ cov($('#fTemp'),'Typical temps for '+fN(temp)+' of '+fN(T)+pc(temp)+'.');
+ $('#fTemp').querySelectorAll('input').forEach(i=>{const b=TB[i.value],k=i.value==='none'?n(r=>!r.temp):n(r=>r.temp&&r.temp[0]>=b[0]&&r.temp[0]<b[1]);i.parentNode.append(' · '+fN(k))});
+ const so=n(soldOut);$('#f-hideso').textContent='Hide sold out ('+fN(so)+')';}
 const bindChecks=(id,k)=>$(id).onchange=()=>{st[k]=new Set([...$(id).querySelectorAll('input:checked')].map(i=>i.value));hideTip();render()};
 const bindSel=(id,k,num)=>$(id).onchange=e=>{st[k]=num?+e.target.value:e.target.value;hideTip();render()};
 bindSel('#fCourse','course');bindSel('#fPop','pop',1);bindSel('#fEntry','entry');bindSel('#fSize','size',1);bindChecks('#fTemp','temps');
