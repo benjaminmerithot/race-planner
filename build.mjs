@@ -77,13 +77,13 @@ const curated = curatedRaw.map(a => {
   return { id, name, city, region, country, lat, lon, date, est: !!est, dists: dists.split(','), diff, profile, note, temp, status, url, x: r(p[0]), y: r(p[1]) };
 });
 
-const near = (a, b) => Math.abs(new Date(a) - new Date(b)) <= 3 * 864e5;
+const near = (a, b, days = 3) => Math.abs(new Date(a) - new Date(b)) <= days * 864e5;
 const norm = s => s.toLowerCase().replace(/[^a-z]/g, '');
 const GEN = new Set('marathon marathons half the and of city international run running race races festival weekend rock roll n annual presented by classic distance memorial mini'.split(' '));
 const sig = (name, city) => { const cw = new Set(city.toLowerCase().split(/[^a-z]+/)); return new Set(name.toLowerCase().replace(/['’.]/g, '').split(/[^a-z0-9]+/).filter(w => w && !GEN.has(w) && !cw.has(w))); };
-function matchRace(list, name, city, st, date, dist) {
+function matchRace(list, name, city, st, date, dist, days = 3) {
   const s = sig(name, city);
-  const cands = list.filter(r => r.region === st && near(r.date, date)).sort((a, b) => (b.dists.includes(dist) - a.dists.includes(dist)));
+  const cands = list.filter(r => r.region === st && near(r.date, date, days)).sort((a, b) => (b.dists.includes(dist) - a.dists.includes(dist)));
   const words = n => new Set(n.toLowerCase().replace(/['’.]/g, '').split(/[^a-z0-9]+/).filter(w => w && !GEN.has(w)));
   for (const r of cands) { const A = words(name), B = words(r.name); const c1 = new Set(city.toLowerCase().split(/[^a-z]+/)); const cw = new Set(r.city.toLowerCase().split(/[^a-z]+/).filter(w => c1.has(w))); if ([...A].some(w => B.has(w) && !cw.has(w))) return r; }
   for (const r of cands) { const t = sig(r.name, r.city); if (norm(r.city) === norm(city) && (s.size === 0 || t.size === 0) && r.dists.includes(dist)) return r; }
@@ -109,17 +109,73 @@ for (const line of hl) {
   const g = geocode(city, st); if (!g) { unmatched.push(city + ',' + st); continue; }
   imported.push({ id: 'h-' + slug(name + '-' + st), name, city, region: st, country: CAADM[st] ? 'CA' : 'US', lat: g[0], lon: g[1], date, est: est === '1', dists: ds, diff: 0, profile: 'Not rated', note: note || 'Listed on running.life', temp: null, status: 'Check race site', url: 'https://www.google.com/search?q=' + encodeURIComponent(name + ' ' + city), fin: 0, src: 'rl' });
 }
+// RunSignup listings (fetch-runsignup.mjs). Curated races keep every field and
+// only gain distances; FindMyMarathon and running.life imports keep their ids
+// (saved stars) and gain the real URL, confirmed date and open status.
+const RSU = fs.existsSync('data/runsignup.json') ? JSON.parse(fs.readFileSync('data/runsignup.json')).races : [];
+const rsuOf = new Map(); // race id -> RunSignup record, for the registration feed
+const zipGeo = z => { const x = z && zipcodes.lookup(z.slice(0, 5)); return x && x.latitude ? [x.latitude, x.longitude] : null; };
+let rsuNew = 0, rsuCurated = 0, rsuUpgraded = 0;
+for (const x of RSU) {
+  const main = x.dists.includes('full') ? 'full' : 'half';
+  const pool = [...curated, ...imported];
+  const hit = matchRace(pool, x.name, x.city, x.region, x.date, main) ||
+    // a projected (est.) date can be off by a week when a race moves
+    matchRace(pool.filter(q => q.est), x.name, x.city, x.region, x.date, main, 10);
+  const addDists = q => x.dists.forEach(d => { if (!q.dists.includes(d)) q.dists.push(d); });
+  if (hit && !hit.src && !hit.rsu) { addDists(hit); if (!rsuOf.has(hit.id)) { rsuOf.set(hit.id, x); rsuCurated++; } continue; }
+  if (hit) {
+    if (!hit.rsu) rsuUpgraded++;
+    addDists(hit); hit.url = x.site || x.url; hit.status = x.open ? 'Open' : 'Check race site';
+    if (hit.est) { hit.date = x.date; hit.est = false; }
+    delete hit.src; hit.rsu = x.rsid; if (!rsuOf.has(hit.id)) rsuOf.set(hit.id, x);
+    continue;
+  }
+  const g = zipGeo(x.zip) || geocode(x.city, x.region); if (!g) { unmatched.push(x.city + ',' + x.region); continue; }
+  let id = 'r-' + slug(x.name + '-' + x.region); if (imported.some(q => q.id === id)) id += '-' + x.rsid;
+  const q = { id, name: x.name, city: x.city, region: x.region, country: x.country, lat: g[0], lon: g[1], date: x.date, est: false, dists: x.dists.slice(), diff: 0, profile: 'Not rated', note: 'Listed on RunSignup', temp: null, status: x.open ? 'Open' : 'Check race site', url: x.site || x.url, fin: 0, rsu: x.rsid };
+  imported.push(q); rsuOf.set(id, x); rsuNew++;
+}
+console.log('runsignup', RSU.length, 'listings:', rsuNew, 'new,', rsuUpgraded, 'imports upgraded,', rsuCurated, 'matched curated');
 console.log('imported', imported.length, 'unmatched', JSON.stringify(unmatched));
 const DEMAND = JSON.parse(fs.readFileSync('demand.json'));
+// Typical temps from Open-Meteo history (temps.mjs) for races without hand-researched temps.
+const TEMPS = fs.existsSync('temps.json') ? JSON.parse(fs.readFileSync('temps.json')) : {};
+const tKey = (lat, lon, date) => `${(Math.round(lat * 10) / 10).toFixed(1)},${(Math.round(lon * 10) / 10).toFixed(1)}|${date.slice(5, 10)}`;
+for (const q of [...curated, ...imported]) if (!q.temp && TEMPS[tKey(q.lat, q.lon, q.date)]) q.temp = TEMPS[tKey(q.lat, q.lon, q.date)];
 const races = [...curated, ...imported].map(q => { const p = q.region === 'HI' ? hiProj([q.lon, q.lat]) : q.region === 'AK' ? akProj([q.lon, q.lat]) : proj([q.lon, q.lat]); const dm = DEMAND[q.id] || {}; return { ...q, dem: dm.lvl || '', demNote: dm.note || '', wk: dm.wk || 0, x: r(p[0]), y: r(p[1]) }; }).filter(q => p0(q));
 function p0(q) { return q.x >= 0 && q.y >= 0 && q.x <= W && q.y <= H; }
 const reg = JSON.parse(fs.readFileSync('reg.json')); // hand-entered key dates
+// Next registration date for races RunSignup lists, unless reg.json already has
+// dates for that race (hand-entered rows win). One row per race, the next one:
+// opening day, the last day before a price rise, or an early close.
+const handReg = new Set(reg.map(g => g.id));
+const inPage = new Set(races.map(q => q.id));
+const usd = n => '$' + (Number.isInteger(n) ? n : n.toFixed(2));
+for (const [id, x] of rsuOf) {
+  if (handReg.has(id) || !inPage.has(id)) continue;
+  const race = races.find(q => q.id === id);
+  const ev = x.events.find(e => e.d === (x.dists.includes('full') ? 'full' : 'half'));
+  const ps = (ev.periods || []).filter(pp => pp.opens && pp.closes).sort((a, b) => a.opens.localeCompare(b.opens));
+  const rows = [];
+  if (ps.length && ps[0].opens.slice(0, 10) > TODAY) rows.push([ps[0].opens.slice(0, 10), 'Registration opens']);
+  for (let i = 0; i + 1 < ps.length; i++) {
+    const a = ps[i], b = ps[i + 1];
+    if (a.fee && b.fee && b.fee > a.fee) rows.push([a.closes.slice(0, 10), `Price increases after today (${usd(a.fee)} to ${usd(b.fee)})`]);
+  }
+  const close = (ev.closes || (ps.length ? ps[ps.length - 1].closes : '') || '').slice(0, 10);
+  if (close && close < race.date) rows.push([close, 'Registration closes']);
+  const next = rows.filter(([d]) => d >= TODAY && d <= race.date).sort((a, b) => a[0].localeCompare(b[0]))[0];
+  if (next) reg.push({ id, d: next[0], label: next[1], est: false });
+}
 
 const geo = {
   W, H,
   us: clip(usOnly), ca: clip(ca), mx: clip(mx), states: clip(states), lakes: clip(lakes),
   hi: round(hiPath(hiFeat)), hiBox, ak: round(akPath(akFeat)), akBox
 };
+fs.mkdirSync('data', { recursive: true });
+fs.writeFileSync('data/races-built.json', JSON.stringify(races.map(({ id, lat, lon, date, temp }) => ({ id, lat, lon, date, temp }))));
 fs.writeFileSync('data.js', 'const GEO=' + JSON.stringify(geo) + ';\nconst RACES=' + JSON.stringify(races) + ';\nconst REG=' + JSON.stringify(reg) + ';\n');
 const tpl = fs.readFileSync('template.html', 'utf8');
 const data = fs.readFileSync('data.js', 'utf8');
