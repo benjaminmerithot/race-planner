@@ -127,9 +127,9 @@ td.nw{white-space:nowrap}
 .so-badge{display:inline-block;font:700 10px Archivo,sans-serif;letter-spacing:.02em;color:#fff;background:#c81e32;border-radius:4px;padding:1px 6px;vertical-align:1px;white-space:nowrap}
 tr.so td{color:var(--mute)}tr.so .nm{text-decoration:line-through;text-decoration-thickness:2px;text-decoration-color:#c81e32}tr.so .tags{opacity:.5}
 td.num{text-align:right}
-#calView{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:20px;align-items:start}#calView[hidden]{display:none}
-@media(max-width:900px){#calView{grid-template-columns:minmax(0,1fr)}}
-.cal{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+#calView{display:block}#calView[hidden]{display:none}
+.cal{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+@media(max-width:700px){.cal{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:440px){.cal{grid-template-columns:minmax(0,1fr)}}
 .mon{border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--card)}
 .mon h3{margin:0 0 6px;font-size:14px;display:flex;justify-content:space-between;align-items:baseline}.mon h3 small{font-weight:500;color:var(--mute);font-size:12px}
 .wk,.days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:2px}.wk span{font-size:10px;color:var(--mute);text-align:center}
@@ -137,7 +137,8 @@ td.num{text-align:right}
 .cd.has{background:color-mix(in srgb,var(--band) 8%,transparent);cursor:pointer;font-weight:700}.cd.has:hover,.cd.sel{background:color-mix(in srgb,var(--band) 22%,transparent)}
 .cd.past{opacity:.35}.cd:disabled{color:var(--mute)}
 .cd em{display:flex;gap:1px;align-items:center;font-style:normal}.cd em i{width:5px;height:5px;border-radius:50%}.cd em b{font-size:8px;font-weight:700;color:var(--mute)}
-.calday{position:sticky;top:12px;max-height:80vh;overflow:auto}
+.calday{margin:0 0 14px;scroll-margin-top:12px}.calday ol{max-height:320px;overflow-y:auto}
+.calhint{margin:0 0 10px;font-size:13px;color:var(--mute)}
 .notes{margin-top:24px;font-size:13px;color:var(--mute);max-width:70ch}
 .notes p{margin:0 0 8px}
 @media(max-width:600px){table{font-size:13px}.stack thead{display:none}.stack tr{display:grid;padding-block:10px}.stack td{display:flow-root;border:0;padding:3px 0;padding-inline-start:8em;text-align:start}.stack td::before{content:attr(data-l);float:inline-start;width:7.5em;margin-inline-start:-8em;white-space:normal;color:var(--mute)}.stack td:empty{display:none}.stack tr{border-bottom:1px solid var(--line)}
@@ -188,7 +189,7 @@ td.num{text-align:right}
         </div>
       </div>
       <div id="listView" hidden><div class="scroll"><table class="stack" id="tbl"><thead><tr><th>Date</th><th>Race</th><th>Where</th><th>Distances</th><th>Popularity</th><th>Size</th><th>Course</th><th>Typical temp</th><th>Registration</th></tr></thead><tbody></tbody></table></div></div>
-      <div id="calView" hidden><div class="cal" id="cal"></div><div class="bib calday" id="calDay"></div></div>
+      <div id="calView" hidden><div class="calhint" id="calDay"></div><div class="cal" id="cal"></div></div>
     </div>
   </div>
   <div class="feeds">
@@ -335,7 +336,7 @@ function renderCal(list){
     h+='<div class="mon"><h3>'+MO[d0.getMonth()]+' '+d0.getFullYear()+'<small>'+cnt+' races</small></h3><div class="wk"><span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span></div><div class="days">'+cells+'</div></div>'}
   $('#cal').innerHTML=h;
   const sel=calSel&&by[calSel]||[];
-  $('#calDay').innerHTML=calSel?'<header><h2>'+esc(fmt(calSel))+'<small>'+sel.length+' race'+(sel.length===1?'':'s')+'</small></h2></header><ol>'+sel.sort((a,b)=>POP(b)-POP(a)).map(r=>li(r.id,r.date,(soldOut(r)?'⊘ ':'')+r.name,esc(r.city+', '+r.region)+' · '+r.dists.map(d=>DN[d]).join(', '),r.est)).join('')+'</ol>':'<div class="empty">Pick a day with dots to see its races.</div>';
+  $('#calDay').className=calSel?'bib calday':'calhint';$('#calDay').innerHTML=calSel?'<header><h2>'+esc(fmt(calSel))+'<small>'+sel.length+' race'+(sel.length===1?'':'s')+'</small></h2></header><ol>'+sel.sort((a,b)=>POP(b)-POP(a)).map(r=>li(r.id,r.date,(soldOut(r)?'⊘ ':'')+r.name,esc(r.city+', '+r.region)+' · '+r.dists.map(d=>DN[d]).join(', '),r.est)).join('')+'</ol>':'Pick a day with dots to see its races.';
 }
 function render(){
   ['5k','10k','half','full'].forEach(d=>{$('#f-'+d+' small').textContent=RACES.filter(r=>upcoming(r)&&r.dists.includes(d)&&(st.c==='all'||r.country===st.c)).length});
@@ -360,7 +361,7 @@ document.addEventListener('click',e=>{
   const tb=e.target.closest('.tabs button');if(tb){regTab=tb.dataset.tab;render();return}
   if(e.target.id==='tblMore'){tblLimit+=200;render();return}
   const vb=e.target.closest('[data-view]');if(vb){setView(vb.dataset.view);return}
-  const cd=e.target.closest('.cd[data-day]');if(cd){calSel=cd.dataset.day;render();return}
+  const cd=e.target.closest('.cd[data-day]');if(cd){calSel=cd.dataset.day;render();$('#calDay').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth',block:'nearest'});return}
   if(e.target.id==='regBtn'){regAll=!regAll;render()}
   if(e.target.id==='raceBtn'){raceAll=!raceAll;render()}
   const row=e.target.closest('[data-race]');if(row&&!e.target.closest('a,[data-star]'))focusRace(row.dataset.race);
