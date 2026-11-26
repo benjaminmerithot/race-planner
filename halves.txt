@@ -1,0 +1,52 @@
+date|name|city|st|dists|est|note
+2027-01-17|Key West Half Marathon|Key West|FL|5k,10k,half|0|Flat island course past Old Town and the waterfront
+2027-06-06|Covered Bridges Half Marathon|Woodstock|VT|half|0|Point-to-point through Vermont covered bridges; loyalty list opens first
+2027-05-15|RBC Brooklyn Half|Brooklyn|NY|half|1|Prospect Park hills, then flat Ocean Parkway to Coney Island
+2027-04-25|NYCRUNS Brooklyn Experience Half|Brooklyn|NY|half|1|Brooklyn waterfront and neighborhoods
+2027-02-28|runDisney Princess Half Marathon|Orlando|FL|5k,10k,half|1|Flat park roads through Walt Disney World
+2027-11-07|Disney Wine & Dine Half Marathon|Orlando|FL|5k,10k,half|1|Night-time start through the Disney parks
+2027-08-29|Disneyland Halloween Half Marathon|Anaheim|CA|5k,10k,half|1|Through Disneyland and Anaheim streets
+2027-09-26|Life Time Chicago Half Marathon|Chicago|IL|5k,half|1|Flat lakefront along Jackson Park and Lake Shore Drive
+2027-11-07|Cambridge Half Marathon|Cambridge|MA|half|1|Flat loop through Cambridge and along the Charles
+2027-04-10|Half Marathon Unplugged|Burlington|VT|half|0|
+2027-05-15|Bennington Museum 250th Half|Bennington|VT|half|0|
+2027-05-22|Dandelion Run|Derby|VT|10k,half,full|0|
+2027-06-13|The Crowley Road Race|Rutland|VT|5k,10k,half|0|
+2027-07-11|Mad Marathon|Waitsfield|VT|5k,10k,half,full|0|
+2027-10-17|Champlain Islands Marathon|South Hero|VT|half,full|0|
+2027-03-07|Hampton Half Marathon|Hampton|NH|half|0|
+2027-05-16|Margarita Half Marathon|Greenland|NH|5k,half|0|
+2027-09-19|North Conway Half Marathon|Conway|NH|5k,half|0|
+2027-10-03|Rockfest Half Marathon|Hampton|NH|5k,half|0|
+2027-03-20|On the Run Half Marathon|Old Orchard Beach|ME|half|0|
+2027-04-11|Boyden Lake Half-Marathon|Perry|ME|half|0|
+2027-05-08|Race the Runways|Brunswick|ME|half|0|
+2027-06-05|Old Port Half Marathon|Portland|ME|5k,half|0|
+2027-06-06|Acadia Half Marathon|Bar Harbor|ME|10k,half|0|
+2027-08-29|Blueberry Cove Half Marathon|Tenants Harbor|ME|half|0|
+2026-12-06|Happy Holidays Half Merrython|Gloucester|MA|5k,half|0|
+2026-12-06|Jingle Bell Half Marathon & 5K|Haverhill|MA|5k,half|0|
+2026-12-06|Frosty Half Marathon|Raynham|MA|half|0|
+2026-12-12|RACE Cancer Holiday Half|Cambridge|MA|half|0|
+2027-01-01|Chilly Willy Half Marathon|Seekonk|MA|5k,10k,half|0|
+2027-03-21|New Bedford Half Marathon|New Bedford|MA|half|0|
+2027-04-03|Fool's Dual Half Marathon|Gloucester|MA|5k,half|0|
+2027-02-27|Colchester Half Marathon|Colchester|CT|half|0|
+2027-04-11|Cheshire Road Race|Cheshire|CT|5k,half|0|
+2027-04-18|SRC Half Marathon|Stamford|CT|5k,10k,half|0|
+2027-05-29|Hamden Hills Half Marathon|Hamden|CT|5k,half|0|
+2027-06-05|Fairfield Road Races|Fairfield|CT|5k,half|0|
+2027-09-06|New Haven Road Race|New Haven|CT|5k,half|0|
+2027-09-11|Gulf Beach Half Marathon|Milford|CT|half|0|
+2027-10-03|SoNo Half Marathon|Norwalk|CT|5k,half|0|
+2027-04-11|Coffee Milk Half Marathon|North Kingstown|RI|5k,10k,half|0|
+2027-05-16|Rhode Island Half Marathon|East Providence|RI|5k,half|0|
+2027-06-06|East Bay Half Marathon|East Providence|RI|5k,half|0|
+2027-06-26|Independence Rhode Race|Bristol|RI|half|0|
+2027-07-11|Kerri "d" Sour Apple Half|Smithfield|RI|5k,half|0|
+2027-09-05|Black Goose Half Marathon|East Providence|RI|5k,10k,half|0|
+2026-12-05|OUC Orlando Half Marathon|Orlando|FL|5k,half|0|
+2026-12-05|White Elephant Half Marathon|Clearwater|FL|5k,10k,half|0|
+2026-11-27|Black Toenail Friday Half Marathon|Commerce Township|MI|half|0|
+2026-12-05|Holiday Hustle Dexter|Dexter|MI|5k,half|0|
+2027-01-09|Time Travel Half-Marathon|Ypsilanti|MI|5k,10k,half|0|

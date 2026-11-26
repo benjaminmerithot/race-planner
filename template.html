@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Race Planner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&display=swap" rel="stylesheet">
+<style>
+/* VOICE: a coach's race board, crisp and practical
+   IDEA: the race bib: pinned paper cards with tear-off tabs and big numerals
+   PICTURE: the continent map with every start line pinned, coloured by distance
+   COLOUR and TYPE: painted course-line blue, asphalt ink, four distance colours; Archivo condensed to expanded
+   LAYOUT: blue band with filters, map beside two bib widgets, full race list below */
+:root{color-scheme:light dark;
+--bg:light-dark(#ffffff,#121418);--ink:light-dark(#15181d,#eef0f3);--mute:light-dark(#5b6370,#a3abb7);
+--line:light-dark(#e3e6ea,#2a2f37);--card:light-dark(#ffffff,#1a1d23);
+--band:light-dark(#1d5bd6,#173f96);--bandink:#fff;
+--land:light-dark(#ffffff,#262b33);--land2:light-dark(#f3f5f7,#1d2128);--water:light-dark(#dde8f3,#0d1622);--stroke:light-dark(#d3d9e0,#3a414c);
+--k5:#0e9f8e;--k10:#7b4dd8;--kh:#ee7612;--kf:#e0283f}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Archivo,system-ui,sans-serif;overflow-x:clip}
+a{color:inherit}
+.wrap{max-width:1240px;margin:0 auto}
+.band{color:var(--ink);padding:22px max(4vw,16px) 14px;border-bottom:1px solid var(--line)}
+h1{font-size:clamp(24px,3vw,34px);line-height:1.05;margin:0;font-weight:800;font-stretch:115%;letter-spacing:-.01em;text-wrap:balance}
+.sub{margin:4px 0 14px;color:var(--mute);font-size:14px}
+.filters{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.chip{appearance:none;border:1px solid var(--line);background:var(--card);color:var(--ink);font:600 13px Archivo,sans-serif;border-radius:999px;min-height:36px;padding:0 13px;display:inline-flex;align-items:center;gap:8px;cursor:pointer}
+.chip .dot{width:10px;height:10px;border-radius:50%;background:var(--c)}
+.chip[aria-pressed=true]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.chip[aria-pressed=false]{color:var(--mute)}
+.chip[aria-pressed=false] .dot{background:transparent;box-shadow:inset 0 0 0 2px var(--c)}
+.chip small{font-weight:500;color:var(--mute)}
+.chip:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid #1d5bd6;outline-offset:2px}
+.fs select,.tools select{appearance:none;-webkit-appearance:none;padding:0 34px 0 12px!important;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%2378808c' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")!important;background-repeat:no-repeat!important;background-position:right 12px center!important;background-size:12px 8px!important}
+.f2{margin-top:10px;gap:8px 14px}.fs{font:600 12px Archivo,sans-serif;color:var(--mute);display:inline-flex;align-items:center;gap:6px}.fs select{font:14px Archivo,sans-serif;min-height:36px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:0 8px;max-width:220px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--card)}
+.seg button{appearance:none;border:0;background:transparent;color:var(--mute);font:600 13px Archivo,sans-serif;min-height:32px;padding:0 12px;cursor:pointer}
+.seg button[aria-pressed=true]{background:var(--ink);color:var(--bg)}
+.search{flex:1 1 180px;max-width:260px;min-height:36px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:14px Archivo,sans-serif;padding:0 14px}
+.search::placeholder{color:var(--mute)}
+main{padding:22px max(4vw,16px) 36px}
+.grid{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:20px;align-items:stretch}
+aside{position:relative}
+.feeds{position:absolute;inset:0;display:flex;flex-direction:column;gap:16px}
+.feeds .bib{margin:0;flex:1 1 0;min-height:0;display:flex;flex-direction:column}
+.feeds .bib ol{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain}
+@media(max-width:900px){.grid{grid-template-columns:minmax(0,1fr)}.feeds{position:static}.feeds .bib{flex:none}.feeds .bib ol{max-height:360px}}
+.mapbox{position:relative;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--water);touch-action:none}
+.mapbox svg{display:block;width:100%;height:auto;cursor:grab}
+.mapbox svg.drag{cursor:grabbing}
+.land{fill:var(--land);stroke:light-dark(#b9c3cf,#46505d);stroke-width:.8;vector-effect:non-scaling-stroke}.land.ctx{fill:var(--land2)}.land.ca{fill:light-dark(#f7f8fa,#22272e)}.states{fill:none;stroke:var(--stroke);stroke-width:1}
+.lake{fill:var(--water);stroke:light-dark(#b9c3cf,#46505d);stroke-width:.8;vector-effect:non-scaling-stroke}
+.hiframe{fill:none;stroke:light-dark(#9aa6b4,#55606e);stroke-dasharray:4 4}
+.pin{stroke:var(--water);stroke-width:2;cursor:pointer;transition:r .15s}
+.pin.on{stroke:var(--ink);stroke-width:3}
+.pin.saved{stroke:#ffd43b;stroke-width:3}
+.zoom{position:absolute;right:10px;top:10px;display:flex;flex-direction:column;gap:6px}
+.zoom button{width:34px;height:34px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:700 17px Archivo,sans-serif;cursor:pointer}
+.legend{position:absolute;left:12px;top:10px;display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12px;color:var(--mute);background:color-mix(in srgb,var(--card) 85%,transparent);padding:6px 10px;border-radius:8px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+.count{position:absolute;left:12px;bottom:10px;font-size:12px;color:var(--mute)}
+/* hover card */
+.tip{position:absolute;z-index:5;width:270px;font-size:13px;max-width:calc(100% - 20px);background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,.18);padding:12px 14px;pointer-events:auto;display:none}
+.tip h3{margin:0 0 2px;font-size:15px;line-height:1.2;font-stretch:90%}
+.tip .meta{font-size:12px;color:var(--mute);margin-bottom:8px}
+.tags{display:flex;flex-wrap:wrap;gap:5px}
+.tag{font:700 11px Archivo,sans-serif;padding:3px 8px;border-radius:999px;color:#fff;background:var(--c);white-space:nowrap}
+.est{font:600 11px Archivo,sans-serif;border:1px solid currentColor;border-radius:4px;padding:0 4px;margin-left:4px;color:var(--mute);vertical-align:1px}
+.row{display:grid;grid-template-columns:78px minmax(0,1fr);gap:8px;margin-top:8px;font-size:13px;align-items:start}
+.row b{font-weight:600;color:var(--mute);font-size:12px}
+.therm{display:flex;align-items:center;gap:8px;white-space:nowrap}
+.therm .bar{flex:1;height:8px;border-radius:4px;background:linear-gradient(90deg,#4b8df0,#f2c230 55%,#e0283f);position:relative;min-width:60px}
+.therm .bar span{position:absolute;top:-3px;height:14px;border:2px solid var(--ink);border-radius:5px;background:transparent}
+.meter{display:flex;gap:3px;margin-bottom:3px}
+.meter i{flex:1;height:8px;border-radius:2px;background:var(--line)}
+.meter i.f{background:var(--ink)}
+.tip .links{display:flex;gap:14px;margin-top:10px;font-size:13px;font-weight:600}
+.star{appearance:none;border:0;background:none;color:var(--mute);font-size:18px;cursor:pointer;width:36px;height:36px;margin:-8px -8px 0 0;float:right}
+.star[aria-pressed=true]{color:#e5a400}
+/* bib widgets */
+.bib{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:22px;position:relative;overflow:hidden}
+.bib header{padding:10px 24px 8px;border-bottom:2px dashed var(--line);display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.bib header::before,.bib header::after{content:"";position:absolute;top:8px;width:7px;height:7px;border-radius:50%;border:2px solid var(--line)}
+.bib header::before{left:8px}.bib header::after{right:8px}
+.bib h2{margin:0;font-size:15px;font-stretch:90%;line-height:1.2}
+.tabs{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;flex:none}.tabs button{appearance:none;border:0;background:transparent;color:var(--mute);font:600 12px Archivo,sans-serif;min-height:28px;padding:0 10px;cursor:pointer;white-space:nowrap}.tabs button[aria-selected=true]{background:var(--ink);color:var(--bg)}
+.bib h2 small{display:block;font-size:12px;color:var(--mute);font-weight:500;font-stretch:100%}
+.bib ol{list-style:none;margin:0;padding:4px 0}
+.bib li{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:10px;align-items:center;padding:6px 16px;cursor:pointer}
+.bib li:hover,.bib li.on{background:color-mix(in srgb,var(--band) 9%,transparent)}
+.num{text-align:center;line-height:1}
+.num b{display:block;font-size:21px;font-weight:800;font-stretch:125%;letter-spacing:-.03em}
+.num span{font-size:10px;font-weight:700;text-transform:uppercase;color:var(--mute)}
+.bib .t{font-weight:700;font-size:13px;line-height:1.25}
+.bib .s{font-size:12px;color:var(--mute);line-height:1.35}
+.left{font:700 12px Archivo,sans-serif;white-space:nowrap;color:var(--band);text-align:right}
+:root[data-theme=dark] .left{color:#8fb3ff}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]) .left{color:#8fb3ff}}
+.more{appearance:none;border:0;background:none;color:var(--ink);font:600 14px Archivo,sans-serif;padding:0 18px;min-height:44px;cursor:pointer;text-decoration:underline}
+.empty{padding:12px 16px;color:var(--mute);font-size:13px}
+/* table */
+h2.sec{font-size:20px;font-stretch:110%;margin:26px 0 2px}
+.secsub{color:var(--mute);margin:0 0 10px;font-size:13px}
+.tools{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:8px;font-size:13px}
+.tools select{font:14px Archivo,sans-serif;min-height:34px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:0 10px}
+.unit button{appearance:none;border:1px solid var(--line);background:var(--card);color:var(--ink);font:600 13px Archivo,sans-serif;min-height:34px;padding:0 12px;cursor:pointer}
+.unit button:first-child{border-radius:8px 0 0 8px}.unit button:last-child{border-radius:0 8px 8px 0;margin-left:-1px}
+.unit button[aria-pressed=true]{background:var(--ink);color:var(--bg)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-size:12px;color:var(--mute);font-weight:600;padding:8px;border-bottom:2px solid var(--ink)}
+td{padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+tbody tr{cursor:pointer}tbody tr:hover{background:color-mix(in srgb,var(--band) 7%,transparent)}
+td.nw{white-space:nowrap}
+.dmini{display:inline-flex;gap:2px;vertical-align:middle;margin-right:6px}.dmini i{width:6px;height:10px;border-radius:1px;background:var(--line)}.dmini i.f{background:var(--ink)}
+.pop{display:inline-flex;gap:2px;vertical-align:middle}.pop i{width:9px;height:9px;border-radius:50%;background:var(--line)}.pop i.f{background:#e0283f}
+.so-badge{display:inline-block;font:700 10px Archivo,sans-serif;letter-spacing:.02em;color:#fff;background:#c81e32;border-radius:4px;padding:1px 6px;vertical-align:1px;white-space:nowrap}
+tr.so td{color:var(--mute)}tr.so .nm{text-decoration:line-through;text-decoration-thickness:2px;text-decoration-color:#c81e32}tr.so .tags{opacity:.5}
+td.num{text-align:right}
+#calView{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:20px;align-items:start}#calView[hidden]{display:none}
+@media(max-width:900px){#calView{grid-template-columns:minmax(0,1fr)}}
+.cal{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+.mon{border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--card)}
+.mon h3{margin:0 0 6px;font-size:14px;display:flex;justify-content:space-between;align-items:baseline}.mon h3 small{font-weight:500;color:var(--mute);font-size:12px}
+.wk,.days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:2px}.wk span{font-size:10px;color:var(--mute);text-align:center}
+.cd{appearance:none;border:0;background:transparent;color:var(--ink);font:12px Archivo,sans-serif;aspect-ratio:1;border-radius:6px;padding:2px 0 0;display:flex;flex-direction:column;align-items:center;gap:1px;min-height:28px}
+.cd.has{background:color-mix(in srgb,var(--band) 8%,transparent);cursor:pointer;font-weight:700}.cd.has:hover,.cd.sel{background:color-mix(in srgb,var(--band) 22%,transparent)}
+.cd.past{opacity:.35}.cd:disabled{color:var(--mute)}
+.cd em{display:flex;gap:1px;align-items:center;font-style:normal}.cd em i{width:5px;height:5px;border-radius:50%}.cd em b{font-size:8px;font-weight:700;color:var(--mute)}
+.calday{position:sticky;top:12px;max-height:80vh;overflow:auto}
+.notes{margin-top:24px;font-size:13px;color:var(--mute);max-width:70ch}
+.notes p{margin:0 0 8px}
+@media(max-width:600px){table{font-size:13px}.stack thead{display:none}.stack tr{display:grid;padding-block:10px}.stack td{display:flow-root;border:0;padding:3px 0;padding-inline-start:8em;text-align:start}.stack td::before{content:attr(data-l);float:inline-start;width:7.5em;margin-inline-start:-8em;white-space:normal;color:var(--mute)}.stack td:empty{display:none}.stack tr{border-bottom:1px solid var(--line)}
+.legend{display:none}.count{position:static;padding:8px 12px}.tip{position:static;width:auto;max-width:none;margin:0;border:0;border-top:1px solid var(--line);border-radius:0;box-shadow:none}}
+@media(prefers-reduced-motion:reduce){.pin{transition:none}}
+</style><script>new MutationObserver(()=>{for(const c of document.querySelectorAll('.stack td:not([data-l])')){let i=0,p=c;while(p=p.previousElementSibling)i+=p.colSpan;c.dataset.l=c.closest('table').rows[0].cells[i]?.textContent||''}}).observe(document,{childList:true,subtree:true})</script></head>
+<body>
+<div class="band"><div class="wrap">
+  <h1>Race Planner: US &amp; Canada</h1>
+  <p class="sub" id="sub">Start lines, sign-up windows and race-day conditions in one place.</p>
+  <div class="filters" role="group" aria-label="Filters">
+    <button class="chip" id="f-5k" data-d="5k" aria-pressed="true" style="--c:var(--k5)"><span class="dot"></span>5K <small></small></button>
+    <button class="chip" id="f-10k" data-d="10k" aria-pressed="true" style="--c:var(--k10)"><span class="dot"></span>10K <small></small></button>
+    <button class="chip" id="f-half" data-d="half" aria-pressed="true" style="--c:var(--kh)"><span class="dot"></span>Half <small></small></button>
+    <button class="chip" id="f-full" data-d="full" aria-pressed="true" style="--c:var(--kf)"><span class="dot"></span>Marathon <small></small></button>
+    <span class="seg" role="group" aria-label="Country"><button data-c="all" aria-pressed="true">All</button><button data-c="US" aria-pressed="false">US</button><button data-c="CA" aria-pressed="false">Canada</button></span>
+    <button class="chip" id="f-saved" aria-pressed="false">★ Saved</button>
+    <input class="search" id="q" type="search" placeholder="Search race or city" aria-label="Search races">
+  </div>
+  <div class="filters f2" role="group" aria-label="More filters">
+    <label class="fs">When <select id="fMon"><option value="all">Any month</option></select></label>
+    <label class="fs">Course <select id="fCourse"><option value="any">Any course</option><option value="fast">Flat or fast (1–2)</option><option value="mod">Moderate (3)</option><option value="hard">Hilly (4–5)</option><option value="rated">Rated courses only</option></select></label>
+    <label class="fs">Popularity <select id="fPop"><option value="0">Any</option><option value="2">2+ dots</option><option value="3">3+ dots</option><option value="4">4+ dots (major races)</option></select></label>
+    <label class="fs">Entry <select id="fEntry"><option value="any">Any</option><option value="open">Open entry (no lottery or sell-out)</option><option value="hard">Lottery, qualifier or sells out</option></select></label>
+    <label class="fs">Field size <select id="fSize"><option value="0">Any</option><option value="500">500+</option><option value="2000">2,000+</option><option value="10000">10,000+</option></select></label>
+    <button class="chip" id="f-hideso" aria-pressed="false">Hide sold out</button>
+    <button class="chip" id="f-reset" aria-pressed="false">Reset filters</button>
+  </div>
+</div></div>
+
+<main><div class="wrap">
+  <div class="grid">
+    <div>
+      <div class="mapbox" id="mapbox">
+        <svg id="map" role="img" aria-label="Map of races across the United States and Canada"></svg>
+        <div class="legend"><span><i style="background:var(--kf)"></i>Marathon</span><span><i style="background:var(--kh)"></i>Half</span><span><i style="background:var(--k10)"></i>10K</span><span><i style="background:var(--k5)"></i>5K</span></div>
+        <div class="zoom"><button id="zin" aria-label="Zoom in">+</button><button id="zout" aria-label="Zoom out">−</button><button id="zreset" aria-label="Reset map" style="font-size:14px">⤢</button></div>
+        <div class="count" id="count"></div>
+        <div class="tip" id="tip" role="dialog" aria-live="polite"></div>
+      </div>
+    </div>
+    <aside><div class="feeds">
+      <section class="bib"><header><h2>Registration<small id="regSub">Openings, lotteries and deadlines</small></h2><span class="tabs" role="tablist"><button role="tab" data-tab="key" aria-selected="true">Key dates</button><button role="tab" data-tab="open" aria-selected="false">Open now</button></span></header><ol id="regList"></ol></section>
+      <section class="bib"><header><h2>Race days coming up<small>Next start lines for your filters</small></h2></header><ol id="raceList"></ol></section>
+    </div></aside>
+  </div>
+
+  <h2 class="sec">Every race on the map</h2>
+  <p class="secsub">Hover or tap a row to find it on the map. Pin colour shows the longest distance offered; bigger pins are more popular races.</p>
+  <div class="tools">
+    <label>Sort <select id="sort"><option value="date">Race date</option><option value="diff">Easiest course first</option><option value="diffd">Hardest course first</option><option value="pop">Most popular first</option><option value="size">Largest field first</option><option value="name">Name</option></select></label>
+    <span class="unit" role="group" aria-label="View"><button data-view="list" aria-pressed="true">List</button><button data-view="cal" aria-pressed="false">12-month calendar</button></span>
+    <span class="unit" role="group" aria-label="Temperature unit"><button data-u="F" aria-pressed="true">°F</button><button data-u="C" aria-pressed="false">°C</button></span>
+  </div>
+  <div id="listView"><div class="scroll"><table class="stack" id="tbl"><thead><tr><th>Date</th><th>Race</th><th>Where</th><th>Distances</th><th>Popularity</th><th>Size</th><th>Course</th><th>Typical temp</th><th>Registration</th></tr></thead><tbody></tbody></table></div></div>
+  <div id="calView" hidden><div class="cal" id="cal"></div><div class="bib calday" id="calDay"></div></div>
+
+  <div class="notes">
+    <p><strong>About the data.</strong> Dates and registration windows were checked on November 26, 2026 against race sites, organizer announcements and race calendars. Dates marked <span class="est">est.</span> are projected from the race's usual weekend or last year's timing; confirm them on the race site before you book.</p>
+    <p><strong>Temperatures</strong> are typical race-morning and afternoon highs for that place and week, based on climate normals. They are not forecasts. Each race card links to the live forecast, which becomes useful about a week out.</p>
+    <p><strong>Coverage.</strong> Full marathons: every US and Canadian marathon on FindMyMarathon's calendar, with its course profile and last-edition finisher count. Halves: the large halves from RunSignup's Top 100 list, plus complete New England lists from running.life; other states are still being added. Races whose next date was not yet posted are projected one year from the last edition and marked est. Imported races link to a web search instead of a verified race site.</p>
+    <p><strong>Popularity</strong> combines field size (RunSignup's 2025 Top 100 race-weekend totals, or marathon finishers) with demand: lotteries, qualifier-only entry and fast sell-outs add a level. <strong>Demand</strong> notes come from organizer and news reports; races without a report say "Demand not tracked".</p>
+    <p><strong>Course difficulty</strong> is rated 1 (flat and fast) to 5 (major climbs or exposure), based on each course's published profile, its elevation and known hills, wind or heat.</p>
+  </div>
+</div></main>
+
+<script>/*DATA*/</script>
+<script>
+{
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const DN={'5k':'5K','10k':'10K',half:'Half',full:'Marathon'};
+const DC={'5k':'var(--k5)','10k':'var(--k10)',half:'var(--kh)',full:'var(--kf)'};
+const ORDER=['full','half','10k','5k'];
+const MO=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const DAY=86400000;
+const today=new Date();today.setHours(0,0,0,0);
+const parse=s=>{const[y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)};
+const byId=Object.fromEntries(RACES.map(r=>[r.id,r]));
+let unit='F';
+const st={d:new Set(['5k','10k','half','full']),c:'all',q:'',saved:false,sort:'date',mon:'all',course:'any',pop:0,entry:'any',size:0,hideSo:false};
+let saved=new Set();
+try{saved=new Set(JSON.parse(localStorage.getItem('rp-saved')||'[]'));const u=localStorage.getItem('rp-unit');if(u)unit=u}catch(e){}
+const persist=()=>{try{localStorage.setItem('rp-saved',JSON.stringify([...saved]));localStorage.setItem('rp-unit',unit)}catch(e){}};
+
+const T=f=>unit==='F'?Math.round(f)+'°F':Math.round((f-32)*5/9)+'°C';
+const fmt=s=>{const d=parse(s);return MO[d.getMonth()]+' '+d.getDate()+', '+d.getFullYear()};
+const fmtS=s=>{const d=parse(s);return MO[d.getMonth()]+' '+d.getDate()};
+const until=s=>{const n=Math.round((parse(s)-today)/DAY);if(n<0)return 'past';if(n===0)return 'today';if(n===1)return 'tomorrow';if(n<14)return 'in '+n+' days';if(n<70)return 'in '+Math.round(n/7)+' wks';return 'in '+Math.round(n/30.4)+' mo'};
+const top=r=>ORDER.find(d=>r.dists.includes(d)&&st.d.has(d))||ORDER.find(d=>r.dists.includes(d));
+const extra=r=>(st.mon==='all'||r.date.slice(0,7)===st.mon)&&(st.course==='any'||(st.course==='fast'?r.diff>=1&&r.diff<=2:st.course==='mod'?r.diff===3:st.course==='hard'?r.diff>=4:r.diff>0))&&POP(r)>=st.pop&&SIZE(r)>=st.size&&(st.entry==='any'||(st.entry==='open'?!['lottery','qualify','fast','soldout'].includes(r.dem)&&!soldOut(r):['lottery','qualify','fast','soldout'].includes(r.dem)))&&!(st.hideSo&&soldOut(r));
+const match=r=>extra(r)&&r.dists.some(d=>st.d.has(d))&&(st.c==='all'||r.country===st.c)&&(!st.saved||saved.has(r.id))&&(!st.q||(r.name+' '+r.city+' '+r.region).toLowerCase().includes(st.q));
+const upcoming=r=>parse(r.date)>=today;
+const nextReg=r=>REG.filter(g=>g.id===r.id&&parse(g.d)>=today).sort((a,b)=>a.d<b.d?-1:1)[0];
+const fc=r=>r.country==='US'?'https://forecast.weather.gov/MapClick.php?lat='+r.lat+'&lon='+r.lon:'https://weather.gc.ca/canada_e.html';
+const meter=n=>'<div class="meter" aria-label="Difficulty '+n+' of 5">'+[1,2,3,4,5].map(i=>'<i class="'+(i<=n?'f':'')+'"></i>').join('')+'</div>';
+const LBL=['','Easy','Moderate','Challenging','Hard','Very hard'];
+const fmtN=n=>n.toLocaleString('en-US');
+const SIZE=r=>r.wk||r.fin||0;
+const DEM={lottery:'Lottery or drawing',qualify:'Qualifiers only',fast:'Sells out fast',soldout:'Sells out',high:'High demand, no sell-out reported','':'Demand not tracked'};
+const POP=r=>{const s=SIZE(r);let p=s>=20000?5:s>=8000?4:s>=2500?3:s>=700?2:s>0?1:0;if(['lottery','qualify','fast'].includes(r.dem))p=Math.min(5,p+1);if(r.dem==='soldout')p=Math.max(p,3);return p};
+const popHTML=r=>{const p=POP(r);return p?'<span class="pop" aria-label="Popularity '+p+' of 5">'+[1,2,3,4,5].map(i=>'<i class="'+(i<=p?'f':'')+'"></i>').join('')+'</span>':'<span style="color:var(--mute)">Not enough data</span>'};
+const soldOut=r=>/sold out|closed/i.test(r.status);
+
+/* ---------- map ---------- */
+const svg=$('#map');const NS='http://www.w3.org/2000/svg';
+svg.setAttribute('viewBox','0 0 '+GEO.W+' '+GEO.H);
+svg.innerHTML='<g id="world"><path class="land ctx" d="'+GEO.mx+'"/><path class="land ca" d="'+GEO.ca+'"/><path class="land" d="'+GEO.us+'"/><path class="states" d="'+GEO.states+'"/><path class="lake" d="'+GEO.lakes+'"/></g>'+
+ '<g id="inset"><rect class="hiframe" x="'+GEO.akBox.x+'" y="'+GEO.akBox.y+'" width="'+GEO.akBox.w+'" height="'+GEO.akBox.h+'" rx="8"/><path class="land" d="'+GEO.ak+'"/><text x="'+(GEO.akBox.x+10)+'" y="'+(GEO.akBox.y+GEO.akBox.h-10)+'" font-size="13" fill="currentColor" opacity=".55">Alaska</text><rect class="hiframe" x="'+GEO.hiBox.x+'" y="'+GEO.hiBox.y+'" width="'+GEO.hiBox.w+'" height="'+GEO.hiBox.h+'" rx="8"/><path class="land" d="'+GEO.hi+'"/><text x="'+(GEO.hiBox.x+10)+'" y="'+(GEO.hiBox.y+GEO.hiBox.h-10)+'" font-size="13" fill="currentColor" opacity=".55">Hawaii</text></g><g id="pins"></g>';
+const world=$('#world'),inset=$('#inset'),pinsG=$('#pins');
+let z={k:1,x:0,y:0};
+const isHI=r=>r.region==='HI'||r.region==='AK';
+let PR=7;
+{const done=new Set();RACES.forEach(a=>{if(done.has(a.id))return;const g=RACES.filter(b=>!done.has(b.id)&&isHI(b)===isHI(a)&&Math.hypot(a.x-b.x,a.y-b.y)<5);g.forEach((b,i)=>{done.add(b.id);const ang=2*Math.PI*i/g.length-Math.PI/2;b.ox=g.length>1?Math.cos(ang):0;b.oy=g.length>1?Math.sin(ang):0})})}
+const place=r=>{const m=PR*1.15;const b=isHI(r)?[r.x,r.y]:[r.x*z.k+z.x,r.y*z.k+z.y];return[b[0]+(r.ox||0)*m,b[1]+(r.oy||0)*m]};
+const pinEls={};
+RACES.slice().sort((a,b)=>POP(a)-POP(b)||SIZE(a)-SIZE(b)).forEach(r=>{const c=document.createElementNS(NS,'circle');c.setAttribute('class','pin');c.setAttribute('r',7);c.dataset.id=r.id;c.setAttribute('tabindex','0');c.setAttribute('role','button');c.setAttribute('aria-label',r.name+', '+r.city);pinEls[r.id]=c;pinsG.appendChild(c)});
+function drawPins(){
+  const pr=Math.min(16,Math.max(7,5.5*GEO.W/(svg.clientWidth||GEO.W)));PR=pr;
+  world.setAttribute('transform','translate('+z.x+' '+z.y+') scale('+z.k+')');
+  world.querySelector('.states').style.strokeWidth=(1/z.k);
+  inset.style.display=z.k>1.05?'none':'';
+  RACES.forEach(r=>{const c=pinEls[r.id];const[x,y]=place(r);c.setAttribute('cx',x);c.setAttribute('cy',y);
+    const show=match(r)&&upcoming(r)&&!(isHI(r)&&z.k>1.05);c.style.display=show?'':'none';
+    c.setAttribute('r',pr*(r.src&&!POP(r)?0.62:[0.62,0.7,0.82,0.95,1.08,1.2][POP(r)]));c.setAttribute('fill',DC[top(r)]);c.classList.toggle('saved',saved.has(r.id))});
+}
+const clampZ=()=>{z.k=Math.min(6,Math.max(1,z.k));z.x=Math.min(0,Math.max(GEO.W-GEO.W*z.k,z.x));z.y=Math.min(0,Math.max(GEO.H-GEO.H*z.k,z.y))};
+const zoomAt=(f,cx,cy)=>{const k=z.k*f;z.x=cx-(cx-z.x)*(k/z.k);z.y=cy-(cy-z.y)*(k/z.k);z.k=k;clampZ();drawPins();hideTip()};
+const svgPt=e=>{const b=svg.getBoundingClientRect();return[(e.clientX-b.left)*GEO.W/b.width,(e.clientY-b.top)*GEO.H/b.height]};
+svg.addEventListener('wheel',e=>{e.preventDefault();const[x,y]=svgPt(e);const dy=e.deltaMode===1?e.deltaY*16:e.deltaY;zoomAt(Math.exp(-Math.max(-60,Math.min(60,dy))*0.0022),x,y)},{passive:false});
+$('#zin').onclick=()=>zoomAt(1.3,GEO.W/2,GEO.H/2);$('#zout').onclick=()=>zoomAt(1/1.3,GEO.W/2,GEO.H/2);
+$('#zreset').onclick=()=>{z={k:1,x:0,y:0};drawPins();hideTip()};
+let drag=null,moved=false;
+svg.addEventListener('pointerdown',e=>{if(e.target.classList.contains('pin'))return;drag={p:svgPt(e),x:z.x,y:z.y};moved=false;svg.setPointerCapture(e.pointerId)});
+svg.addEventListener('pointermove',e=>{if(!drag)return;const p=svgPt(e);const dx=p[0]-drag.p[0],dy=p[1]-drag.p[1];if(Math.abs(dx)+Math.abs(dy)>3){moved=true;svg.classList.add('drag')}z.x=drag.x+dx;z.y=drag.y+dy;clampZ();drawPins()});
+svg.addEventListener('pointerup',()=>{drag=null;svg.classList.remove('drag')});
+svg.addEventListener('click',e=>{if(!e.target.classList.contains('pin')&&!moved)hideTip()});
+
+/* ---------- hover card ---------- */
+const tip=$('#tip'),box=$('#mapbox');let tipId=null,pinned=false;
+function tipHTML(r){
+  const g=nextReg(r);const days=Math.round((parse(r.date)-today)/DAY);
+  let temp;
+  if(r.temp){const lo=r.temp[0],hi=r.temp[1],a=(lo-30)/(95-30)*100,b=(hi-30)/(95-30)*100;
+    temp='<div class="therm">'+T(lo)+'<div class="bar"><span style="left:'+Math.max(0,a)+'%;width:'+Math.max(4,b-a)+'%"></span></div>'+T(hi)+'</div><div style="font-size:12px;color:var(--mute)">Race morning to afternoon high, from climate normals'+(days<=10&&days>=0?'. Live forecast is available now.':'')+'</div>';}
+  else temp='<span style="color:var(--mute)">No typical-temperature data yet. Use the live forecast link.</span>';
+  const sz=r.wk?fmtN(r.wk)+' across race weekend (2025)'+(r.fin?'<div style="font-size:12px;color:var(--mute)">'+fmtN(r.fin)+' marathon finishers</div>':''):r.fin?fmtN(r.fin)+' marathon finishers (last edition)':'<span style="color:var(--mute)">Not available</span>';
+  return '<button class="star" data-star="'+esc(r.id)+'" aria-pressed="'+saved.has(r.id)+'" aria-label="Save race">'+(saved.has(r.id)?'★':'☆')+'</button>'+
+  '<h3>'+esc(r.name)+'</h3><div class="meta">'+esc(fmt(r.date))+(r.est?'<span class="est">est.</span>':'')+' · '+esc(r.city+', '+r.region)+'</div>'+
+  '<div class="tags">'+ORDER.slice().reverse().filter(d=>r.dists.includes(d)).map(d=>'<span class="tag" style="--c:'+DC[d]+'">'+DN[d]+'</span>').join('')+'</div>'+
+  '<div class="row"><b>Popularity</b><div>'+popHTML(r)+'</div></div>'+
+  '<div class="row"><b>Demand</b><div><strong>'+esc(DEM[r.dem||''])+'</strong>'+(r.demNote?'<div style="font-size:12px;color:var(--mute)">'+esc(r.demNote)+'</div>':'')+'</div></div>'+
+  '<div class="row"><b>Race size</b><div>'+sz+'</div></div>'+
+  '<div class="row"><b>Typical temp</b><div>'+temp+'</div></div>'+
+  '<div class="row"><b>Course</b><div>'+(r.diff?meter(r.diff)+'<strong>'+LBL[r.diff]+'</strong> · ':'<strong>Not rated</strong> · ')+esc(r.profile)+'<div style="font-size:12px;color:var(--mute)">'+esc(r.note)+'</div></div></div>'+
+  '<div class="row"><b>Registration</b><div>'+(soldOut(r)?'<span class="so-badge">'+esc(r.status)+'</span>':esc(r.status))+(g?'<div style="font-size:12px;color:var(--mute)">'+esc(fmtS(g.d))+(g.est?' (est.)':'')+': '+esc(g.label)+'</div>':'')+'</div></div>'+
+  '<div class="links"><a href="'+esc(r.url)+'" target="_blank" rel="noopener">'+(r.src?'Find race site ↗':'Race site ↗')+'</a><a href="'+esc(fc(r))+'" target="_blank" rel="noopener">Live forecast ↗</a></div>';
+}
+function showTip(id,pin){
+  const r=byId[id];if(!r)return;tipId=id;pinned=!!pin;tip.innerHTML=tipHTML(r);tip.style.display='block';
+  Object.values(pinEls).forEach(c=>c.classList.toggle('on',c.dataset.id===id));
+  const b=box.getBoundingClientRect(),[x,y]=place(r),px=x*b.width/GEO.W,py=y*b.height/GEO.H;
+  const tw=tip.offsetWidth,th=tip.offsetHeight;
+  let L=px+16,Tp=py-th/2;if(L+tw>b.width-8)L=px-tw-16;if(L<8)L=8;Tp=Math.max(8,Math.min(b.height-th-8,Tp));
+  tip.style.left=L+'px';tip.style.top=Tp+'px';
+  document.querySelectorAll('[data-race]').forEach(el=>el.classList.toggle('on',el.dataset.race===id));
+}
+function hideTip(){tip.style.display='none';tipId=null;pinned=false;Object.values(pinEls).forEach(c=>c.classList.remove('on'));document.querySelectorAll('[data-race].on').forEach(el=>el.classList.remove('on'))}
+pinsG.addEventListener('pointerover',e=>{const id=e.target.dataset.id;if(id&&!pinned)showTip(id)});
+pinsG.addEventListener('pointerout',e=>{if(e.target.dataset.id&&!pinned&&!tip.matches(':hover'))setTimeout(()=>{if(!pinned&&!tip.matches(':hover')&&!pinsG.querySelector('.pin:hover'))hideTip()},120)});
+pinsG.addEventListener('click',e=>{const id=e.target.dataset.id;if(id)showTip(id,true)});
+pinsG.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.dataset.id){e.preventDefault();showTip(e.target.dataset.id,true)}});
+tip.addEventListener('mouseleave',()=>{if(!pinned)hideTip()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')hideTip()});
+document.addEventListener('click',e=>{const s=e.target.closest('[data-star]');if(!s)return;const id=s.dataset.star;saved.has(id)?saved.delete(id):saved.add(id);persist();render();if(tipId===id)showTip(id,pinned)});
+function focusRace(id){const r=byId[id];if(!r)return;if(!isHI(r)&&z.k<1.8){z.k=1.8;z.x=GEO.W/2-r.x*z.k;z.y=GEO.H/2-r.y*z.k;clampZ();drawPins()}showTip(id,true);box.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth',block:'nearest'})}
+
+/* ---------- widgets + table ---------- */
+let regAll=false,raceAll=false,regTab='key',tblLimit=150,calSel=null,view='list';
+function li(id,date,title,sub,est){const d=parse(date);return '<li data-race="'+esc(id)+'" tabindex="0"><div class="num"><b>'+d.getDate()+'</b><span>'+MO[d.getMonth()]+'</span></div><div><div class="t">'+esc(title)+'</div><div class="s">'+sub+'</div></div><div class="left">'+esc(until(date))+(est?'<div class="est" style="margin:2px 0 0">est.</div>':'')+'</div></li>'}
+function renderCal(list){
+  const by={};list.forEach(r=>{(by[r.date]=by[r.date]||[]).push(r)});
+  const start=new Date(today.getFullYear(),today.getMonth(),1);let h='';
+  for(let m=0;m<12;m++){const d0=new Date(start.getFullYear(),start.getMonth()+m,1);const n=new Date(d0.getFullYear(),d0.getMonth()+1,0).getDate();const off=d0.getDay();let cells='';let cnt=0;
+    for(let i=0;i<off;i++)cells+='<span></span>';
+    for(let d=1;d<=n;d++){const k=d0.getFullYear()+'-'+String(d0.getMonth()+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');const rs=by[k]||[];cnt+=rs.length;const past=new Date(d0.getFullYear(),d0.getMonth(),d)<today;
+      cells+='<button class="cd'+(rs.length?' has':'')+(past?' past':'')+(calSel===k?' sel':'')+'"'+(rs.length?' data-day="'+k+'" aria-label="'+rs.length+' races on '+MO[d0.getMonth()]+' '+d+'"':' disabled')+'><span>'+d+'</span>'+(rs.length?'<em>'+rs.slice(0,3).map(r=>'<i style="background:'+DC[top(r)]+'"></i>').join('')+(rs.length>3?'<b>+'+(rs.length-3)+'</b>':'')+'</em>':'')+'</button>'}
+    h+='<div class="mon"><h3>'+MO[d0.getMonth()]+' '+d0.getFullYear()+'<small>'+cnt+' races</small></h3><div class="wk"><span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span></div><div class="days">'+cells+'</div></div>'}
+  $('#cal').innerHTML=h;
+  const sel=calSel&&by[calSel]||[];
+  $('#calDay').innerHTML=calSel?'<header><h2>'+esc(fmt(calSel))+'<small>'+sel.length+' race'+(sel.length===1?'':'s')+'</small></h2></header><ol>'+sel.sort((a,b)=>POP(b)-POP(a)).map(r=>li(r.id,r.date,(soldOut(r)?'⊘ ':'')+r.name,esc(r.city+', '+r.region)+' · '+r.dists.map(d=>DN[d]).join(', '),r.est)).join('')+'</ol>':'<div class="empty">Pick a day with dots to see its races.</div>';
+}
+function render(){
+  ['5k','10k','half','full'].forEach(d=>{$('#f-'+d+' small').textContent=RACES.filter(r=>upcoming(r)&&r.dists.includes(d)&&(st.c==='all'||r.country===st.c)).length});
+  const list=RACES.filter(r=>match(r)&&upcoming(r));
+  $('#count').textContent=list.length+' upcoming races shown';
+  const first=RACES.filter(upcoming).map(r=>r.date).sort()[0],last=RACES.map(r=>r.date).sort().at(-1);
+  $('#sub').textContent=RACES.filter(upcoming).length+' races from '+fmtS(first)+' through '+MO[parse(last).getMonth()]+' '+parse(last).getFullYear()+'. Hover a pin for course difficulty, typical race-day temperature and sign-up status.';
+  const regs=REG.filter(g=>parse(g.d)>=today&&byId[g.id]&&match(byId[g.id])).sort((a,b)=>a.d<b.d?-1:1);
+  const openNow=list.filter(r=>/^Open( now)?$/.test(r.status)).sort((a,b)=>a.date<b.date?-1:1);
+  document.querySelectorAll('.tabs button').forEach(b=>{b.setAttribute('aria-selected',b.dataset.tab===regTab);b.textContent=(b.dataset.tab==='key'?'Key dates ':'Open now ')+(b.dataset.tab==='key'?regs.length:openNow.length)});
+  $('#regSub').textContent=regTab==='key'?'Openings, lotteries and deadlines':'Taking entries now, by race date';
+  $('#regList').innerHTML=regTab==='key'?(regs.length?regs.map(g=>li(g.id,g.d,byId[g.id].name,esc(g.label),g.est)).join(''):'<li class="empty" style="display:block">No dated registration events match these filters.</li>'):(openNow.length?openNow.map(r=>li(r.id,r.date,r.name,'Race day · '+esc(r.city+', '+r.region),r.est)).join(''):'<li class="empty" style="display:block">No open registrations match these filters.</li>');
+  const races=list.slice().sort((a,b)=>a.date<b.date?-1:1);
+  $('#raceList').innerHTML=races.length?races.map(r=>li(r.id,r.date,r.name,esc(r.city+', '+r.region)+' · '+r.dists.slice().sort((a,b)=>ORDER.indexOf(b)-ORDER.indexOf(a)).map(d=>DN[d]).join(', '),r.est)).join(''):'<li class="empty" style="display:block">No races match these filters.</li>';
+  const sorted=list.slice().sort(st.sort==='pop'?(a,b)=>POP(b)-POP(a)||SIZE(b)-SIZE(a):st.sort==='size'?(a,b)=>SIZE(b)-SIZE(a):st.sort==='name'?(a,b)=>a.name.localeCompare(b.name):st.sort==='diff'?(a,b)=>a.diff-b.diff||(a.date<b.date?-1:1):st.sort==='diffd'?(a,b)=>b.diff-a.diff||(a.date<b.date?-1:1):(a,b)=>a.date<b.date?-1:1);
+  const shown=sorted.slice(0,tblLimit);
+  $('#tbl tbody').innerHTML=sorted.length?shown.map(r=>{const g=nextReg(r);const so=soldOut(r);return '<tr data-race="'+esc(r.id)+'"'+(so?' class="so"':'')+'><td class="nw">'+esc(fmtS(r.date))+(r.est?'<span class="est">est.</span>':'')+'</td><td><strong class="nm">'+(saved.has(r.id)?'★ ':'')+esc(r.name)+'</strong>'+(so?' <span class="so-badge">'+esc(r.status)+'</span>':'')+'</td><td>'+esc(r.city+', '+r.region)+'</td><td><div class="tags">'+ORDER.slice().reverse().filter(d=>r.dists.includes(d)).map(d=>'<span class="tag" style="--c:'+DC[d]+'">'+DN[d]+'</span>').join('')+'</div></td><td class="nw">'+(POP(r)?popHTML(r):'')+(r.dem&&r.dem!=='high'?'<div style="font-size:11px;color:var(--mute)">'+esc(DEM[r.dem])+'</div>':'')+'</td><td class="nw num">'+(SIZE(r)?fmtN(SIZE(r)):'')+'</td><td class="nw">'+(r.diff?'<span class="dmini">'+[1,2,3,4,5].map(i=>'<i class="'+(i<=r.diff?'f':'')+'"></i>').join('')+'</span>':'')+esc(r.profile)+'</td><td class="nw">'+(r.temp?T(r.temp[0])+' to '+T(r.temp[1]):'')+'</td><td>'+(so?'':esc(r.status))+(g?'<div style="font-size:12px;color:var(--mute)">'+esc(fmtS(g.d))+(g.est?' (est.)':'')+'</div>':'')+'</td></tr>'}).join('')+(sorted.length>tblLimit?'<tr><td colspan="9"><button class="more" id="tblMore">Show '+Math.min(200,sorted.length-tblLimit)+' more of '+(sorted.length-tblLimit)+'</button></td></tr>':''):'<tr><td colspan="9" style="color:var(--mute)">No races match these filters. Turn a distance back on or clear the search.</td></tr>';
+  renderCal(list);
+  drawPins();
+}
+document.addEventListener('click',e=>{
+  const tb=e.target.closest('.tabs button');if(tb){regTab=tb.dataset.tab;render();return}
+  if(e.target.id==='tblMore'){tblLimit+=200;render();return}
+  const vb=e.target.closest('[data-view]');if(vb){view=vb.dataset.view;document.querySelectorAll('[data-view]').forEach(x=>x.setAttribute('aria-pressed',x===vb));$('#listView').hidden=view!=='list';$('#calView').hidden=view!=='cal';return}
+  const cd=e.target.closest('.cd[data-day]');if(cd){calSel=cd.dataset.day;render();return}
+  if(e.target.id==='regBtn'){regAll=!regAll;render()}
+  if(e.target.id==='raceBtn'){raceAll=!raceAll;render()}
+  const row=e.target.closest('[data-race]');if(row&&!e.target.closest('a,[data-star]'))focusRace(row.dataset.race);
+});
+document.addEventListener('keydown',e=>{const row=e.target.closest&&e.target.closest('li[data-race]');if(row&&e.key==='Enter')focusRace(row.dataset.race)});
+document.addEventListener('mouseover',e=>{const row=e.target.closest('tr[data-race],li[data-race]');Object.values(pinEls).forEach(c=>c.classList.toggle('on',!!row&&c.dataset.id===row.dataset.race||c.dataset.id===tipId))});
+document.querySelectorAll('.chip[data-d]').forEach(b=>b.onclick=()=>{const d=b.dataset.d;if(st.d.has(d)){if(st.d.size===1)return;st.d.delete(d)}else st.d.add(d);b.setAttribute('aria-pressed',st.d.has(d));hideTip();render()});
+document.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{st.c=b.dataset.c;document.querySelectorAll('.seg button').forEach(x=>x.setAttribute('aria-pressed',x===b));hideTip();render()});
+$('#f-saved').onclick=()=>{st.saved=!st.saved;$('#f-saved').setAttribute('aria-pressed',st.saved);hideTip();render()};
+$('#q').oninput=e=>{st.q=e.target.value.trim().toLowerCase();hideTip();render()};
+$('#sort').onchange=e=>{st.sort=e.target.value;render()};
+document.querySelectorAll('.unit button').forEach(b=>{b.setAttribute('aria-pressed',b.dataset.u===unit);b.onclick=()=>{unit=b.dataset.u;document.querySelectorAll('.unit button').forEach(x=>x.setAttribute('aria-pressed',x===b));persist();render();if(tipId)showTip(tipId,pinned)}});
+{const ms=new Set(RACES.filter(upcoming).map(r=>r.date.slice(0,7)));$('#fMon').innerHTML+= [...ms].sort().map(m=>'<option value="'+m+'">'+MO[+m.slice(5)-1]+' '+m.slice(0,4)+'</option>').join('');}
+const bindSel=(id,k,num)=>$(id).onchange=e=>{st[k]=num?+e.target.value:e.target.value;hideTip();render()};
+bindSel('#fMon','mon');bindSel('#fCourse','course');bindSel('#fPop','pop',1);bindSel('#fEntry','entry');bindSel('#fSize','size',1);
+$('#f-hideso').onclick=()=>{st.hideSo=!st.hideSo;$('#f-hideso').setAttribute('aria-pressed',st.hideSo);render()};
+$('#f-reset').onclick=()=>{Object.assign(st,{mon:'all',course:'any',pop:0,entry:'any',size:0,hideSo:false,q:'',saved:false,c:'all'});st.d=new Set(['5k','10k','half','full']);['#fMon','#fCourse','#fPop','#fEntry','#fSize'].forEach(s=>$(s).selectedIndex=0);$('#q').value='';document.querySelectorAll('.chip[data-d]').forEach(b=>b.setAttribute('aria-pressed','true'));$('#f-saved').setAttribute('aria-pressed','false');$('#f-hideso').setAttribute('aria-pressed','false');document.querySelectorAll('.seg button').forEach(x=>x.setAttribute('aria-pressed',x.dataset.c==='all'));hideTip();render()};
+const roBox=new ResizeObserver(()=>{drawPins();if(tipId)showTip(tipId,pinned)});roBox.observe(box);
+render();
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,495 @@
+Texas Marathon|Kingwood|TX|01/01/2027|Very Flat|87
+New Years (Day) Double Marathon|Allen|TX|01/01/2027|Mostly Flat|26
+Revolution Run Marathon|Kearns|UT|01/01/2027|Very Flat|4
+Lake Mead Marathon|Boulder City|NV|01/09/2027|Hilly|63
+Athens Big-Fork Trail Marathon|Big Fork|AR|01/09/2027|Very Hilly|184
+Buckeye Marathon|Buckeye|AZ|01/09/2027|Downhill|212
+Las Cruces Marathon|Las Cruces|NM|01/09/2027|Mostly Flat|160
+San Diego Trail Runs Marathon|San Diego|CA|01/09/2027|Rolling Hills|81
+River City Micro Marathon|Decatur|AL|01/09/2027|Very Flat|19
+Mobile Marathon|Mobile|AL|01/10/2027|Very Flat|114
+Walt Disney World Marathon|Orlando|FL|01/10/2027|Very Flat|13291
+Las Vegas Marathon|Las Vegas|NV|01/10/2027|Rolling Hills|1703
+McAllen Marathon|McAllen|TX|01/16/2027|Very Flat|211
+Daufuskie Island Marathon|Daufuskie Island|SC|01/16/2027|Mostly Flat|206
+Florida Track Club Mary Andrews Marathon|Hawthorne|FL|01/16/2027|Mostly Flat|51
+Mangum Marathon|Ellerbe|NC|01/16/2027|Hilly|54
+Houston Marathon|Houston|TX|01/17/2027|Very Flat|9257
+Carlsbad Marathon|Carlsbad|CA|01/17/2027|Rolling Hills|1186
+Redding Marathon|Redding|CA|01/17/2027|Downhill|239
+Maui Oceanfront Marathon|Maui|HI|01/17/2027|Mostly Flat|206
+Lost Dutchman Marathon|Apache Junction|AZ|01/17/2027|Downhill|287
+Crystal Springs Trail Run Marathon|Woodside|CA|01/17/2027|Hilly|37
+Louisiana Marathon|Baton Rouge|LA|01/17/2027|Mostly Flat|1477
+Jekyll Island Marathon|Jekyll Island|GA|01/17/2027|Very Flat|303
+Red Rock Canyon Marathon|Las Vegas|NV|01/23/2027|Very Hilly|63
+Sun Marathon|Santa Clara|UT|01/23/2027|Downhill|174
+Icebreaker Marathon|East Meadow|NY|01/23/2027|Mostly Flat|54
+Renegade Rehab Run Marathon|Lecanto|FL|01/24/2027|Mostly Flat|12
+Museum of Aviation Marathon|Warner Robins|GA|01/30/2027|Mostly Flat|59
+Yuma Territorial Marathon|Yuma|AZ|01/30/2027|Mostly Flat|98
+Death Valley Marathon|Death Valley|CA|01/30/2027|Rolling Hills|42
+Miami Marathon|Miami|FL|01/31/2027|Mostly Flat|3251
+USA Fit Marathon|Sugar Land|TX|01/31/2027|Very Flat|130
+Clearwater Marathon|Clearwater|FL|01/31/2027|Mostly Flat|534
+Town of Celebration Marathon|Celebration|FL|01/31/2027|Very Flat|400
+Big Beach Marathon|Gulf Shores|AL|01/31/2027|Mostly Flat|383
+Warm up Columbus|Dublin|OH|02/07/2027|Very Flat|56
+Surfside Beach Marathon|Surfside|TX|02/06/2027|Very Flat|33
+Groundhog Day Marathon|Grand Rapids|MI|02/06/2027|Rolling Hills|101
+Mt. Umunhum Trail Marathon|San Jose|CA|02/06/2027|Very Hilly|6
+Railway Marathon|Fultondale|AL|02/06/2027|Rolling Hills|59
+Jed Smith Ultra Classic Marathon|Sacramento|CA|02/06/2027|Mostly Flat|38
+Tallahassee Marathon|Tallahassee|FL|02/07/2027|Rolling Hills|379
+Surf City Marathon|Huntington Beach|CA|02/07/2027|Mostly Flat|1963
+Florida Marathon|Melbourne|FL|02/07/2027|Mostly Flat|328
+Donna Marathon|Jacksonville Beach|FL|02/07/2027|Very Flat|861
+Harlingen Marathon|Harlingen|TX|02/07/2027|Very Flat|100
+St. Petersburg Distance Classic Marathon|St. Petersburg|FL|02/07/2027|Mostly Flat|694
+Mesa Marathon|Mesa|AZ|02/13/2027|Downhill|3008
+Run Oak Island Marathon|Oak Island|NC|02/13/2027|Very Flat|292
+Rescue Rover Marathon (Dalmatian Run Fest)|Bedford|TX|02/13/2027|Rolling Hills|17
+Love Chocolate Marathon|Savannah|GA|02/13/2027|Very Flat|41
+Ft. Lauderdale A1A Marathon|Fort Lauderdale|FL|02/14/2027|Very Flat|738
+Austin Marathon|Austin|TX|02/14/2027|Rolling Hills|7295
+Valentines Day Massacre Marathon|Greensboro|NC|02/14/2027|Rolling Hills|39
+Puppy Power Marathon (Dalmatian Run Fest)|Bedford|TX|02/14/2027|Rolling Hills|18
+Mighty Mutt Marathon (Dalmatian Run Fest)|Bedford|TX|02/15/2027|Rolling Hills|14
+Mississippi Blues Marathon|Jackson|MS|02/20/2027|Rolling Hills|237
+Buzz Marathon|San Miguel|CA|02/20/2027|Hilly|20
+Montara Mountain Marathon|Pacifica|CA|02/20/2027|Very Hilly|16
+Running from Yeti Marathon|Springfield|MO|02/20/2027|Rolling Hills|51
+Fort Ebey Kettles Trail Marathon|Coupeville|WA|02/20/2027|Rolling Hills|30
+Galveston Marathon|Galveston|TX|02/21/2027|Very Flat|131
+Ventura Marathon|Ventura|CA|02/21/2027|Downhill|1313
+We Run this Beach Marathon|Gulf Shores|AL|02/21/2027|Mostly Flat|145
+Ellerbe Marathon|Ellerbe|NC|02/27/2027|Hilly|45
+Wilmington Marathon|Wilmington|NC|02/27/2027|Mostly Flat|1492
+Woodlands Marathon|The Woodlands|TX|02/27/2027|Mostly Flat|1026
+Cummins Falls Marathon|Cookeville|TN|02/27/2027|Rolling Hills|81
+SoCal Marathon|Huntington Beach|CA|02/27/2027|Downhill|267
+Wicked Fast (AZ) Marathon|Tucson|AZ|02/27/2027|Downhill|74
+El Paso Marathon|El Paso|TX|02/28/2027|Rolling Hills|657
+Cowtown Marathon|Fort Worth|TX|02/28/2027|Rolling Hills|2134
+Oak Ridge to Kingston Express Marathon|Oak Ridge|TN|02/28/2027|Rolling Hills|11
+Every Womans Marathon|New Orleans|LA|02/28/2027|Very Flat|3949
+Combos Marathon|Albany|GA|03/06/2027|Mostly Flat|253
+Myrtle Beach Marathon|Myrtle Beach|SC|03/06/2027|Very Flat|1674
+Umstead Marathon|Raleigh|NC|03/06/2027|Hilly|118
+Seneca Creek Greenway Trail Marathon|Damascus|MD|03/06/2027|Rolling Hills|88
+Run the Alamo 26.2 Marathon|San Antonio|TX|03/06/2027|Rolling Hills|606
+Hachie Marathon|Waxahachie|TX|03/06/2027|Mostly Flat|22
+Atlanta Marathon|Atlanta|GA|03/07/2027|Rolling Hills|3078
+Little Rock Marathon|Little Rock|AR|03/07/2027|Rolling Hills|1208
+Los Angeles Marathon|Los Angeles|CA|03/07/2027|Rolling Hills|21933
+Napa Valley Marathon|Napa|CA|03/07/2027|Downhill|1942
+B and A Marathon|Severna Park|MD|03/07/2027|Mostly Flat|320
+Zydeco Marathon|Lafayette|LA|03/07/2027|Very Flat|175
+Marathon of the Treasure Coast|Stuart|FL|03/07/2027|Mostly Flat|245
+Newport News One City Marathon|Newport News|VA|03/07/2027|Very Flat|508
+Chattanooga Marathon|Chattanooga|TN|03/07/2027|Rolling Hills|279
+Catalina Marathon|Avalon|CA|03/13/2027|Very Hilly|410
+Seabrook Lucky Trail Marathon|Seabrook|TX|03/13/2027|Very Flat|69
+Run Through Time Marathon|Salida|CO|03/13/2027|Very Hilly|182
+Land Between the Lakes Marathon|Grand Rivers|KY|03/13/2027|Rolling Hills|91
+Sand Hollow Marathon|Hurricane|UT|03/13/2027|Hilly|82
+Des Moines St. Paddys Marathon|Des Moines|IA|03/13/2027|Rolling Hills|201
+Run the Rainbow for Childrens Marathon|Jackson|MS|03/13/2027|Rolling Hills|83
+Big Island International Marathon|Hilo|HI|03/14/2027|Rolling Hills|115
+Tobacco Road Marathon|Cary|NC|03/14/2027|Rolling Hills|853
+St. Patricks Marathon|Washington|DC|03/14/2027|Very Flat|63
+Napa Valley Trail Marathon|Calistoga|CA|03/20/2027|Very Hilly|20
+Bataan Memorial Death March Marathon|Las Cruces|NM|03/20/2027|Very Hilly|2621
+Grasslands Trail Run Marathon|Decatur|TX|03/20/2027|Rolling Hills|99
+Asheville Marathon|Asheville|NC|03/20/2027|Rolling Hills|584
+Heroes of America Marathon|Columbus|GA|03/20/2027|Rolling Hills|114
+Classic City Marathon|Athens|GA|03/20/2027|Hilly|354
+Shamrock Marathon|Virginia Beach|VA|03/21/2027|Very Flat|2435
+Oakland Marathon|Oakland|CA|03/21/2027|Rolling Hills|1061
+Irving Marathon|Irving|TX|03/21/2027|Rolling Hills|497
+Fort Smith Marathon|Fort Smith|AR|03/21/2027|Rolling Hills|84
+Race to Space Marathon|Huntsville|AL|03/21/2027|Mostly Flat|129
+Rend Lake Marathon|Whittington|IL|03/27/2027|Mostly Flat|90
+McKirdy Micro Marathon (Breaking 3)|Valley Cottage|NY|03/27/2027|Very Flat|124
+Charlottesville Marathon|Charlottesville|VA|04/03/2027|Hilly|178
+St. Louis Marathon|St. Louis|MO|04/03/2027|Rolling Hills|1409
+Black Mountain Marathon|Black Mountain|NC|04/03/2027|Very Hilly|257
+Yakima River Canyon Marathon|Ellensburg|WA|04/03/2027|Downhill|190
+Golden Gate Headlands Marathon|Sausalito|CA|04/03/2027|Very Hilly|28
+Savin Rock Marathon|West Haven|CT|04/03/2027|Rolling Hills|133
+REVEL Mt. Charleston Marathon|Las Vegas|NV|04/03/2027|Downhill|1179
+Salisbury Marathon|Salisbury|MD|04/03/2027|Rolling Hills|279
+Little Apple Marathon|Manhattan|KS|04/03/2027|Very Flat|65
+Cheap Marathon|Derry|NH|04/03/2027|Rolling Hills|550
+Bedrock Valley Trail Marathon|Hemet|CA|04/03/2027|Rolling Hills|33
+Albuquerque Marathon|Albuquerque|NM|04/03/2027|Mostly Flat|0
+Ohio River Road Runners Club Marathon|Xenia|OH|04/04/2027|Mostly Flat|104
+Virginia Creeper Marathon|Abingdon|VA|04/04/2027|Rolling Hills|68
+Trailbreaker Marathon|Waukesha|WI|04/04/2027|Mostly Flat|89
+Modesto Marathon|Modesto|CA|04/04/2027|Mostly Flat|366
+Bakersfield Marathon|Bakersfield|CA|04/04/2027|Hilly|464
+Coast Guard Marathon|Elizabeth City|NC|04/04/2027|Very Flat|964
+Martian Marathon|Dearborn|MI|04/10/2027|Mostly Flat|147
+Horse Capital Marathon|Lexington|KY|04/10/2027|Rolling Hills|159
+Milwaukee Marathon|Milwaukee|WI|04/10/2027|Rolling Hills|1092
+New South Trail Marathon|Charlotte|NC|04/10/2027|Hilly|60
+Philadelphia Trail Marathon|Philadelphia|PA|04/10/2027|Hilly|119
+Knoxville Marathon|Knoxville|TN|04/11/2027|Rolling Hills|844
+Athens Marathon|Athens|OH|04/11/2027|Mostly Flat|224
+Vernonia Marathon|Banks|OR|04/11/2027|Downhill|177
+Bend Marathon|Bend|OR|04/11/2027|Hilly|406
+Coastal Delaware Running Festival Marathon|Rehoboth Beach|DE|04/11/2027|Mostly Flat|747
+Spring Chance BQ.2 Marathon|Geneva|IL|04/11/2027|Very Flat|124
+Millbrook Marathon|Millbrook|NY|04/11/2027|Hilly|84
+University of Charleston Marathon|Charleston|WV|04/11/2027|Mostly Flat|231
+Wenatchee Marathon|Wenatchee|WA|04/17/2027|Rolling Hills|87
+Blue Ridge Marathon|Roanoke|VA|04/17/2027|Very Hilly|470
+Carmel Marathon|Carmel|IN|04/17/2027|Mostly Flat|687
+Golden Driller Marathon|Tulsa|OK|04/17/2027|Mostly Flat|160
+Newport Rhode Races Marathon|Newport|RI|04/17/2027|Rolling Hills|1255
+Virginia Marathon|Middleburg|VA|04/17/2027|Hilly|205
+Run the River Marathon|Kennewick|WA|04/17/2027|Mostly Flat|161
+Brew City Marathon|Milwaukee|WI|04/17/2027|Mostly Flat|339
+Delaware Marathon|Wilmington|DE|04/18/2027|Rolling Hills|643
+Mountains 2 Beach Marathon|Ventura|CA|04/18/2027|Downhill|2060
+Jersey City Marathon|Jersey City|NJ|04/18/2027|Mostly Flat|3111
+Washington State Marathon|Seattle|WA|04/18/2027|Mostly Flat|0
+Boston Marathon|Boston|MA|04/19/2027|Downhill|29025
+Illinois Marathon|Champaign|IL|04/24/2027|Mostly Flat|1099
+Rock n Roll Nashville Marathon|Nashville|TN|04/24/2027|Rolling Hills|3189
+Garmin Olathe Marathon|Olathe|KS|04/24/2027|Rolling Hills|543
+Kentucky Derby Festival Marathon|Louisville|KY|04/24/2027|Mostly Flat|1502
+Salt Lake City Marathon|Salt Lake City|UT|04/24/2027|Downhill|1931
+Wisconsin Marathon|Kenosha|WI|04/24/2027|Mostly Flat|292
+Great Woods Marathon|Mansfield|MA|04/24/2027|Very Flat|108
+Thelma and Louise Marathon|Moab|UT|04/24/2027|Very Hilly|54
+Kewash Marathon|Washington|IA|04/24/2027|Rolling Hills|96
+Valley Thaw Out Races Marathon|Palmer|AK|04/24/2027|Rolling Hills|34
+Lewis and Clark Marathon|Council Bluffs|IA|04/24/2027|Mostly Flat|0
+Eugene Marathon|Eugene|OR|04/25/2027|Mostly Flat|4536
+Big Sur International Marathon|Carmel|CA|04/25/2027|Hilly|3318
+Oklahoma City Memorial Marathon|Oklahoma City|OK|04/25/2027|Rolling Hills|2527
+Glass City Marathon|Toledo|OH|04/25/2027|Mostly Flat|1223
+Maui Marathon|Lahaina|HI|04/25/2027|Mostly Flat|404
+Gettysburg North-South Marathon|Gettysburg|PA|04/25/2027|Hilly|136
+Kalamazoo Marathon|Kalamazoo|MI|04/25/2027|Rolling Hills|398
+Jim Thorpe Marathon|Jim Thorpe|PA|04/25/2027|Downhill|774
+2Slow4Boston Marathon|Greer|SC|04/25/2027|Rolling Hills|55
+Cedar Rapids Marathon|Cedar Rapids|IA|04/25/2027|Rolling Hills|609
+Fort Wayne Marathon|Fort Wayne|IN|04/25/2027|Mostly Flat|105
+MV Spring Classic Marathon|Vineyard Haven|MA|04/27/2027|Mostly Flat|148
+Shiprock Marathon|Shiprock|NM|05/01/2027|Hilly|187
+Great Allegheny Ohiopyle Marathon|Ohiopyle|PA|05/01/2027|Rolling Hills|53
+Garmin Marathon - Durham|Durham|NC|05/01/2027|Rolling Hills|880
+Flying Pig Marathon|Cincinnati|OH|05/02/2027|Hilly|5267
+OC Marathon|Costa Mesa|CA|05/02/2027|Mostly Flat|3563
+Pittsburgh Marathon|Pittsburgh|PA|05/02/2027|Rolling Hills|5024
+Tacoma City Marathon|Tacoma|WA|05/02/2027|Hilly|422
+Colorado Marathon|Fort Collins|CO|05/02/2027|Downhill|1162
+Long Island Marathon|East Meadow|NY|05/02/2027|Mostly Flat|471
+Lincoln Marathon|Lincoln|NE|05/02/2027|Rolling Hills|1106
+Eau Claire Marathon|Eau Claire|WI|05/02/2027|Rolling Hills|866
+Avenue of the Giants Marathon|Weott|CA|05/02/2027|Hilly|545
+Chicagoland Spring Marathon|Schaumburg|IL|05/02/2027|Mostly Flat|534
+Maine Coast Marathon|Wells|ME|05/02/2027|Mostly Flat|917
+York Marathon|York|PA|05/02/2027|Rolling Hills|235
+Boise River Marathon|Boise|ID|05/02/2027|Rolling Hills|283
+Hudson Valley Marathon|Highland|NY|05/02/2027|Rolling Hills|406
+Providence Rhode Races Marathon|Providence|RI|05/02/2027|Rolling Hills|568
+Maple Leaf Marathon|Fairlee|VT|05/07/2027|Rolling Hills|25
+Lake Wobegon Trail Marathon|St. Joseph|MN|05/08/2027|Mostly Flat|353
+Starved Rock Country Marathon|Ottawa|IL|05/08/2027|Rolling Hills|125
+Granite State Marathon|Nashua|NH|05/08/2027|Rolling Hills|63
+Pine Tree Marathon|Portland|ME|05/09/2027|Mostly Flat|43
+Ogden Marathon|Ogden|UT|05/15/2027|Downhill|1528
+Famous Idaho Potato Marathon|Boise|ID|05/15/2027|Mostly Flat|264
+New River Marathon|Fleetwood|NC|05/15/2027|Hilly|182
+Beach to Bay Marathon|Corpus Christi|TX|05/15/2027|Very Flat|125
+Cleveland Marathon|Cleveland|OH|05/16/2027|Rolling Hills|2012
+Windermere Marathon|Spokane|WA|05/16/2027|Mostly Flat|223
+Sugarloaf Marathon|Kingfield|ME|05/16/2027|Downhill|497
+Colfax Marathon|Denver|CO|05/16/2027|Rolling Hills|2917
+Capital City Marathon|Olympia|WA|05/16/2027|Rolling Hills|389
+Epic Marathon|Green Bay|WI|05/16/2027|Rolling Hills|379
+Fargo Marathon|Fargo|ND|05/22/2027|Very Flat|1315
+Whitefish Marathon|Whitefish|MT|05/22/2027|Hilly|257
+Madeline Island Marathon|La Pointe|WI|05/22/2027|Rolling Hills|91
+Conquer the Canal Marathon|Delaware City|DE|05/22/2027|Mostly Flat|78
+Old Colony Marathon|Springfield|MA|05/28/2027|Mostly Flat|49
+Bayshore Marathon|Traverse City|MI|05/29/2027|Mostly Flat|1732
+Mud Mountain Dam (Spring) Marathon|Enumclaw|WA|05/29/2027|Downhill|180
+Vermont City Marathon|Burlington|VT|05/30/2027|Rolling Hills|1472
+Wyoming Marathon|Laramie|WY|05/30/2027|Very Hilly|21
+Coeur d Alene Marathon|Coeur d'Alene|ID|05/30/2027|Rolling Hills|523
+Buffalo Marathon|Buffalo|NY|05/30/2027|Mostly Flat|1488
+Conquer the Cove Trail Marathon|Roanoke|VA|05/30/2027|Very Hilly|62
+Red Island Marathon|Warwick|RI|05/30/2027|Mostly Flat|49
+Northwoods Escape Marathon|Minocqua|WI|05/30/2027|Mostly Flat|60
+Mississauga Marathon|Mississauga|ON|04/25/2027|Downhill|615
+Gopher Attack Marathon|Regina|SK|04/25/2027|Very Flat|57
+Toronto Marathon|Toronto|ON|05/02/2027|Downhill|2975
+Fredericton Marathon|Fredericton|NB|05/09/2027|Mostly Flat|368
+Blue Nose Marathon|Halifax|NS|05/23/2027|Hilly|455
+Calgary Marathon|Calgary|AB|05/30/2027|Rolling Hills|1937
+Saskatchewan Marathon|Saskatoon|SK|05/30/2027|Mostly Flat|235
+Ottawa Marathon|Ottawa|ON|05/30/2027|Rolling Hills|4780
+Course des Pompiers Marathon|Laval|QC|05/30/2027|Rolling Hills|474
+Community Strong Weekend Marathon|Sault Ste. Marie|ON|06/20/2027|Mostly Flat|14
+Bear Lake Wyoming Marathon|Cokeville|WY|06/03/2027|Hilly|41
+Utah Valley Marathon|Provo|UT|06/05/2027|Downhill|1519
+Newport Marathon (OR)|Newport|OR|06/05/2027|Mostly Flat|397
+Gods Country Marathon|Galeton|PA|06/05/2027|Very Hilly|82
+Teton Dam Marathon|Rexburg|ID|06/05/2027|Hilly|97
+Bear Lake Utah Marathon|Garden City|UT|06/05/2027|Rolling Hills|67
+Timberline Marathon|Government Camp|OR|06/05/2027|Hilly|91
+Race the Lake Marathon|Cooperstown|NY|06/05/2027|Rolling Hills|106
+Bear Paw Marathon|Havre|MT|06/05/2027|Downhill|31
+MISH Waterfront Marathon|Gladstone|MI|06/05/2027|Mostly Flat|85
+Rock n Roll San Diego Marathon|San Diego|CA|06/06/2027|Mostly Flat|6657
+Casper Marathon|Casper|WY|06/06/2027|Mostly Flat|89
+Steamboat Marathon|Steamboat Springs|CO|06/06/2027|Downhill|344
+North Olympic Discovery Marathon|Port Angeles|WA|06/06/2027|Hilly|329
+Deadwood-Mickelson Trail Marathon|Deadwood|SD|06/06/2027|Very Hilly|238
+Maritime Marathon|Manitowoc|WI|06/06/2027|Mostly Flat|254
+Seaside Marathon|Ventura|CA|06/06/2027|Mostly Flat|202
+Hatfield-McCoy Marathon|Williamson|WV|06/12/2027|Hilly|181
+Skagway Marathon|Skagway|AK|06/12/2027|Hilly|23
+Jackson River Scenic Trail Marathon|Covington|VA|06/12/2027|Rolling Hills|119
+Lake Placid Marathon|Lake Placid|NY|06/13/2027|Rolling Hills|374
+Great Bangor Marathon|Bangor|ME|06/13/2027|Rolling Hills|101
+Moosehead Marathon|Greenville|ME|06/13/2027|Rolling Hills|14
+Mayors Marathon|Anchorage|AK|06/19/2027|Hilly|804
+Charlevoix Marathon|Charlevoix|MI|06/19/2027|Mostly Flat|468
+Super Hyak Marathon|North Bend|WA|06/19/2027|Downhill|488
+Grandmas Marathon|Duluth|MN|06/19/2027|Mostly Flat|9602
+Estes Park Marathon|Estes Park|CO|06/20/2027|Downhill|144
+Bay of Fundy Marathon|Lubec|ME|06/20/2027|Rolling Hills|160
+Boise Marathon|Boise|ID|06/20/2027|Mostly Flat|206
+Leadville Trail Marathon|Leadville|CO|06/26/2027|Very Hilly|709
+Morgan Valley Marathon|Morgan|UT|06/26/2027|Hilly|73
+Wicked Fast (MT) Marathon|Bozeman|MT|06/26/2027|Downhill|232
+Missoula Marathon|Missoula|MT|06/27/2027|Mostly Flat|1250
+Foot Traffic Flat Marathon|Portland|OR|07/04/2027|Mostly Flat|289
+Dances with Dirt Marathon - Devils Lake|Baraboo|WI|07/10/2027|Hilly|78
+Mad Marathon|Waitsfield|VT|07/11/2027|Hilly|290
+Shoreline Marathon|Ventura|CA|07/11/2027|Mostly Flat|193
+Mesa Falls Marathon|Ashton|ID|07/17/2027|Downhill|155
+Great Augusta Marathon|Augusta|ME|07/18/2027|Rolling Hills|95
+Deseret News Marathon|Salt Lake City|UT|07/24/2027|Downhill|401
+Idaho Falls Marathon|Idaho Falls|ID|07/24/2027|Rolling Hills|78
+Jack and Jills Downhill Marathon|North Bend|WA|07/24/2027|Downhill|684
+Run the Pier Marathon|Manistee|MI|07/24/2027|Mostly Flat|85
+San Francisco Marathon|San Francisco|CA|07/25/2027|Hilly|7166
+Juneau Marathon|Juneau|AK|07/31/2027|Rolling Hills|75
+Camarillo Marathon|Camarillo|CA|08/01/2027|Mostly Flat|115
+Humboldt Bay Marathon|Eureka|CA|08/08/2027|Rolling Hills|96
+Edmonton Marathon|Edmonton|AB|08/15/2027|Mostly Flat|1545
+Humpys Marathon|Anchorage|AK|08/22/2027|Rolling Hills|253
+Santa Rosa Marathon|Santa Rosa|CA|08/22/2027|Mostly Flat|1345
+Wausau Marathon|Wausau|WI|08/22/2027|Mostly Flat|165
+New England Green River Marathon|Greenfield|MA|08/22/2027|Downhill|318
+Sri Chinmoy Marathon|Congers|NY|08/24/2026|Very Flat|309
+Runtastic NEBO Marathon|Payson|UT|08/28/2027|Downhill|245
+North Country Trail Marathon|Wellston|MI|08/29/2026|Rolling Hills|179
+Nebraska State Fair Marathon|Grand Island|NE|08/29/2026|Very Flat|119
+Pocatello Marathon|Pocatello|ID|09/04/2027|Downhill|213
+Marquette Marathon|Marquette|MI|09/04/2027|Downhill|618
+East Canyon Marathon|Morgan|UT|09/04/2027|Downhill|73
+Mud Mountain Dam (Fall) Marathon|Enumclaw|WA|09/04/2027|Downhill|175
+Kauai Marathon|Koloa|HI|09/05/2027|Very Hilly|319
+Surfers Point Marathon|Ventura|CA|09/05/2027|Mostly Flat|238
+Bound for Boston Marathon (Atlanta)|Suwanee|GA|09/05/2027|Mostly Flat|79
+Appletree Marathon|Vancouver|WA|09/05/2027|Mostly Flat|208
+Sackets Harbor Marathon|Sackets Harbor|NY|09/05/2027|Rolling Hills|340
+Last Chance BQ.2 Marathon|Geneva|IL|09/06/2026|Very Flat|164
+Beantown Marathon|Hingham|MA|09/06/2026|Rolling Hills|306
+Heart of America Marathon|Columbia|MO|09/07/2026|Hilly|138
+REVEL Big Cottonwood Marathon|Salt Lake City|UT|09/11/2027|Downhill|1165
+Lock 2 Lock Marathon|Williamsport|MD|09/11/2027|Very Flat|107
+Moose Mountain Marathon|Lutsen|MN|09/12/2026|Very Hilly|326
+Holland Haven Marathon|Holland|MI|09/12/2027|Rolling Hills|353
+Cascade Express Marathon|North Bend|WA|09/12/2026|Downhill|563
+Boston or Bust Marathon|Huntsville|AL|09/12/2027|Mostly Flat|111
+Queen City Marathon|Regina|SK|09/13/2026|Very Flat|409
+Erie Marathon|Erie|PA|09/13/2026|Very Flat|967
+Skagit Flats Marathon|Burlington|WA|09/13/2026|Very Flat|112
+Last Chance BQ.2 (Grand Rapids) Marathon|Grand Rapids|MI|09/13/2026|Mostly Flat|122
+Tunnel Light Marathon|North Bend|WA|09/13/2026|Downhill|232
+Sundance to Spearfish Marathon|Spearfish|SD|09/13/2026|Downhill|131
+Georgina Marathon|Keswick|ON|09/13/2026|Mostly Flat|478
+Wicked Fast (PA) Marathon|Jim Thorpe|PA|09/13/2026|Downhill|261
+Air Force Marathon|Dayton|OH|09/18/2027|Mostly Flat|1792
+Bismarck Marathon|Bismarck|ND|09/18/2027|Mostly Flat|171
+Equinox Marathon|Fairbanks|AK|09/19/2026|Hilly|385
+Back Your Badge Marathon|Plainfield|IN|09/19/2027|Rolling Hills|104
+Pikes Peak Marathon|Manitou Springs|CO|09/19/2027|Very Hilly|722
+Sioux Falls Marathon|Sioux Falls|SD|09/19/2027|Mostly Flat|404
+Top of Utah Marathon|Logan|UT|09/19/2026|Mostly Flat|198
+Yonkers Marathon|Yonkers|NY|09/20/2026|Rolling Hills|193
+Montana Marathon|Billings|MT|09/20/2026|Downhill|221
+Fox Cities Marathon|Appleton|WI|09/20/2026|Rolling Hills|379
+Bellingham Bay Marathon|Bellingham|WA|09/20/2026|Rolling Hills|301
+Fox Valley Marathon|St. Charles|IL|09/20/2026|Mostly Flat|497
+Garmin Marathon - Toledo|Toledo|OH|09/20/2026|Mostly Flat|441
+Akron Marathon|Akron|OH|09/25/2027|Rolling Hills|821
+Jackson Hole Marathon|Jackson|WY|09/25/2027|Rolling Hills|238
+Monument Marathon|Gering|NE|09/25/2027|Downhill|89
+Mill Race Marathon|Columbus|IN|09/25/2027|Mostly Flat|188
+Adirondack Marathon|Schroon Lake|NY|09/26/2027|Hilly|126
+Hamptons Marathon|East Hampton|NY|09/26/2026|Mostly Flat|440
+Clarence DeMar Marathon|Keene|NH|09/26/2027|Downhill|369
+Belleville Main Street Marathon|Belleville|IL|09/26/2026|Rolling Hills|206
+Omaha Marathon|Omaha|NE|09/27/2026|Rolling Hills|389
+Quad Cities Marathon|Moline|IL|09/27/2026|Mostly Flat|576
+Boulderthon - Boulder Marathon|Boulder|CO|09/26/2027|Rolling Hills|2506
+St. George Marathon|St. George|UT|10/02/2027|Downhill|5281
+Leavenworth Marathon|Leavenworth|WA|10/02/2027|Downhill|310
+Colorado Springs Marathon|Colorado Springs|CO|10/02/2027|Hilly|431
+New Hampshire Marathon|Bristol|NH|10/03/2026|Hilly|247
+Long Beach Marathon|Long Beach|CA|10/03/2027|Mostly Flat|5809
+Portland Marathon|Portland|OR|10/03/2027|Rolling Hills|3912
+Wineglass Marathon|Corning|NY|10/03/2027|Downhill|2309
+Towpath Marathon|Peninsula|OH|10/03/2026|Mostly Flat|177
+Sleeping Bear Marathon|Empire|MI|10/03/2026|Mostly Flat|248
+Kingdom Marathon|West Glover|VT|10/03/2026|Hilly|50
+Greenbrier River Trail Marathon|Cass|WV|10/03/2027|Downhill|101
+Twin Cities Marathon|St. Paul|MN|10/17/2027|Rolling Hills|8427
+Maine Marathon|Portland|ME|10/04/2026|Rolling Hills|1327
+Lakefront Marathon|Milwaukee|WI|10/04/2026|Rolling Hills|1869
+Quebec City Marathon|Quebec|QC|10/04/2026|Rolling Hills|2168
+County Marathon|Picton|ON|10/04/2026|Mostly Flat|194
+Run Crazy Horse Marathon|Hill City|SD|10/04/2026|Very Hilly|111
+Ann Arbor Marathon|Ann Arbor|MI|10/04/2026|Rolling Hills|314
+P tit Train du Nord Marathon|Saint-Jerome|QC|10/04/2026|Downhill|2036
+BHM 26.2 Marathon|Birmingham|AL|10/04/2026|Rolling Hills|184
+Muskoka Marathon|Bracebridge|ON|10/04/2026|Rolling Hills|227
+Antelope Island Marathon|Syracuse|UT|10/08/2027|Rolling Hills|102
+Hartford Marathon|Hartford|CT|10/09/2027|Rolling Hills|2181
+Bemidji Blue Ox Marathon|Bemidji|MN|10/09/2027|Rolling Hills|220
+Hayden Lake Marathon|Hayden Lake|ID|10/09/2027|Hilly|86
+Steamtown Marathon|Scranton|PA|10/10/2027|Downhill|1081
+Chicago Marathon|Chicago|IL|10/10/2027|Very Flat|54492
+City of Trees Marathon|Boise|ID|10/10/2026|Rolling Hills|266
+Cape Cod Marathon|Falmouth|MA|10/10/2027|Rolling Hills|1305
+Whistlestop Marathon|Ashland|WI|10/10/2026|Downhill|200
+Freedoms Run Marathon|Shepherdstown|WV|10/10/2026|Hilly|123
+Spokane Marathon|Spokane|WA|10/10/2027|Hilly|280
+Humboldt Redwoods Marathon|Weott|CA|10/10/2027|Rolling Hills|326
+Newport Marathon (RI)|Newport|RI|10/10/2027|Rolling Hills|1085
+Des Plaines River Trail Marathon|Lincolnshire|IL|10/10/2026|Mostly Flat|204
+Rogue Marathon|Medford|OR|10/10/2026|Downhill|168
+Long View Marathon|Loveland|CO|10/10/2026|Rolling Hills|157
+Mohawk-Hudson River Marathon|Albany|NY|10/11/2026|Downhill|633
+Prairie Fire Marathon|Wichita|KS|10/11/2026|Mostly Flat|382
+Valley Harvest Marathon|Wolfville|NS|10/11/2026|Rolling Hills|198
+Victoria Marathon|Victoria|BC|10/11/2026|Rolling Hills|3220
+Ottawa Fall Colours Marathon|Ottawa|ON|10/11/2026|Rolling Hills|158
+Marathon de Magog|Magog|QC|10/11/2026|Hilly|157
+Montreal Marathon|Montreal|QC|10/11/2026|Rolling Hills|3729
+Original Las Vegas Marathon|Henderson|NV|10/11/2026|Hilly|162
+Baystate Marathon|Lowell|MA|10/17/2027|Mostly Flat|1140
+Lake Tahoe Marathon|South Lake Tahoe|CA|10/17/2027|Very Hilly|183
+Baltimore Marathon|Baltimore|MD|10/17/2026|Hilly|1961
+Detroit Free Press Marathon|Detroit|MI|10/17/2027|Mostly Flat|4672
+Des Moines Marathon|Des Moines|IA|10/17/2027|Rolling Hills|1889
+Columbus Marathon|Columbus|OH|10/17/2027|Mostly Flat|4448
+Mount Desert Island Marathon|Bar Harbor|ME|10/17/2027|Hilly|811
+Atlantic City Marathon|Atlantic City|NJ|10/17/2027|Very Flat|1240
+Mankato Marathon|Mankato|MN|10/17/2026|Mostly Flat|381
+Columbia Gorge Marathon|Hood River|OR|10/17/2027|Very Hilly|218
+Great New York State Marathon|Syracuse|NY|10/17/2027|Mostly Flat|277
+Snohomish River Run Marathon|Snohomish|WA|10/17/2027|Rolling Hills|175
+Cannonball Marathon|Greensboro|NC|10/17/2026|Rolling Hills|154
+Champlain Islands Marathon|South Hero|VT|10/18/2026|Rolling Hills|136
+Toronto Waterfront Marathon|Toronto|ON|10/17/2027|Mostly Flat|7306
+Prince Edward Island Marathon|Charlottetown|PE|10/18/2026|Rolling Hills|113
+Grand Rapids Marathon|Grand Rapids|MI|10/18/2026|Mostly Flat|1158
+Duke City Marathon|Albuquerque|NM|10/18/2026|Mostly Flat|422
+Suffolk County Marathon|Babylon|NY|10/18/2026|Mostly Flat|308
+Emerald Isle Marathon|Emerald Isle|NC|10/23/2027|Very Flat|286
+Spinx Runfest Marathon|Greenville|SC|10/24/2026|Rolling Hills|439
+Duchesnay-Quebec Marathon|Sainte-Catherine-de-la-Jacques-Cartier|QC|10/24/2027|Rolling Hills|583
+Niagara Falls International Marathon|Niagara Falls|ON|10/25/2026|Mostly Flat|946
+Marine Corps Marathon|Arlington|VA|10/24/2027|Mostly Flat|24989
+Seven Bridges Marathon|Chattanooga|TN|10/25/2026|Rolling Hills|844
+Silver Comet Marathon|Mableton|GA|10/31/2026|Rolling Hills|252
+Ocean State Rhode Races Marathon|Narragansett|RI|10/25/2026|Rolling Hills|463
+RDC Marathon|Durham|NC|10/25/2026|Rolling Hills|225
+Lubbock Marathon|Lubbock|TX|10/25/2026|Rolling Hills|150
+Haunted Forest Marathon|Canal Fulton|OH|10/25/2026|Very Flat|249
+Kansas City Marathon|Kansas City|MO|10/30/2027|Hilly|1798
+Historic Drawbridge Running Festival Marathon|St. Michaels|MD|10/31/2026|Very Flat|127
+City of Oaks Marathon|Raleigh|NC|11/01/2026|Hilly|1016
+Marshall University Marathon|Huntington|WV|11/01/2026|Mostly Flat|402
+Bass Pro Shops Conservation Marathon|Springfield|MO|11/01/2026|Rolling Hills|610
+Rim Rock Marathon|Fruita|CO|11/01/2026|Very Hilly|101
+Boundary Bay Marathon|Delta|BC|11/01/2026|Very Flat|239
+Louisville Marathon|Louisville|KY|11/01/2026|Hilly|372
+Albuquerque Running Fiesta Marathon|Albuquerque|NM|11/01/2026|Rolling Hills|229
+Indianapolis Monumental Marathon|Indianapolis|IN|11/06/2027|Mostly Flat|8440
+New York City Marathon|New York|NY|11/07/2027|Rolling Hills|61151
+Hamilton Marathon Road2Hope|Hamilton|ON|11/07/2027|Very Flat|895
+Two Cities Marathon|Fresno|CA|11/07/2027|Mostly Flat|916
+Moab Trail Marathon|Moab|UT|11/07/2026|Very Hilly|344
+Springfield Marathon|Springfield|IL|11/07/2026|Mostly Flat|102
+Chessie Trail Marathon|Lexington|VA|11/07/2026|Rolling Hills|141
+Salina Crossroads Marathon|Salina|KS|11/07/2026|Mostly Flat|470
+Outer Banks Marathon|Manteo|NC|11/08/2026|Mostly Flat|349
+Harrisburg Marathon|Harrisburg|PA|11/08/2026|Mostly Flat|580
+Manchester City Marathon|Manchester|NH|11/08/2026|Hilly|579
+Fort Worth Marathon|Fort Worth|TX|11/08/2026|Mostly Flat|744
+MO Cowbell Marathon|St. Charles|MO|11/08/2026|Mostly Flat|788
+REVEL Big Bear Marathon|Redlands|CA|11/07/2026|Downhill|1000
+Thumb Coast Marathon|Port Austin|MI|11/08/2026|Mostly Flat|269
+Garmin Marathon - Tucson|Tucson|AZ|11/08/2026|Rolling Hills|548
+Chickamauga Battlefield Marathon|Chickamauga|GA|11/13/2027|Rolling Hills|408
+Richmond Marathon|Richmond|VA|11/13/2027|Rolling Hills|5355
+Charlotte Marathon|Charlotte|NC|11/13/2027|Rolling Hills|3066
+Madison Marathon|Madison|WI|11/14/2027|Rolling Hills|2174
+Veterans Marathon|Columbia City|IN|11/14/2026|Rolling Hills|119
+Tunnel Hill Marathon|Vienna|IL|11/14/2026|Rolling Hills|138
+Central Florida Legends Marathon|DeBary|FL|11/14/2026|Mostly Flat|191
+Ocean City Running Festival Marathon|Ocean City|MD|11/14/2026|Very Flat|442
+New Orleans Marathon|New Orleans|LA|11/14/2026|Very Flat|1004
+Santa Clarita Marathon|Santa Clarita|CA|11/15/2026|Mostly Flat|218
+D and L RaceFest Marathon|Allentown|PA|11/15/2026|Mostly Flat|388
+White River Marathon|Cotter|AR|11/21/2026|Mostly Flat|178
+Route 66 Marathon|Tulsa|OK|11/22/2026|Rolling Hills|818
+Philadelphia Marathon|Philadelphia|PA|11/22/2026|Mostly Flat|12576
+Space Coast Marathon|Cocoa|FL|11/22/2026|Very Flat|940
+Gobbler Grind Marathon|Overland Park|KS|11/22/2026|Rolling Hills|219
+Log Jammer Marathon|Shreveport|LA|11/22/2026|Rolling Hills|101
+Harpeth Hills Flying Monkey Marathon|Nashville|TN|11/22/2026|Hilly|336
+Stennis Space Center Marathon|Ocean Springs|MS|11/28/2026|Very Flat|57
+North Central Rail Trail Marathon|Sparks|MD|11/28/2026|Mostly Flat|287
+Seattle Ghost Marathon|Seattle|WA|11/28/2026|Very Flat|87
+Seattle Marathon|Seattle|WA|11/29/2026|Hilly|2470
+Death Valley Trail Marathon|Death Valley|CA|12/05/2026|Hilly|67
+St. Jude Memphis Marathon|Memphis|TN|12/05/2026|Rolling Hills|1973
+Hoover Dam Marathon|Boulder City|NV|12/05/2026|Hilly|77
+Rehoboth Beach Marathon|Rehoboth Beach|DE|12/05/2026|Mostly Flat|980
+3 Bridges Marathon|Little Rock|AR|12/05/2026|Very Flat|180
+Panama City Beach Marathon|Panama City Beach|FL|12/05/2026|Very Flat|295
+Millinocket Marathon|Millinocket|ME|12/05/2026|Rolling Hills|167
+Brazos Bend 100 Marathon|Needville|TX|12/05/2026|Very Flat|134
+California International Marathon|Sacramento|CA|12/06/2026|Downhill|8178
+Tidewater Striders Dismal Swamp Marathon|Chesapeake|VA|12/06/2026|Very Flat|133
+Queens Marathon (Fall)|Queens|NY|12/06/2026|Mostly Flat|306
+San Antonio Marathon|San Antonio|TX|12/06/2026|Rolling Hills|3335
+Jacksonville Marathon|Jacksonville|FL|12/12/2026|Very Flat|703
+Kiawah Island Marathon|Kiawah Island|SC|12/12/2026|Very Flat|1328
+Phoenix Marathon|Phoenix|AZ|12/12/2026|Mostly Flat|2372
+Marathon Project (Gold Wave)|Chandler|AZ|12/12/2026|Very Flat|147
+Honolulu Marathon|Honolulu|HI|12/13/2026|Mostly Flat|22745
+Rocket City Marathon|Huntsville|AL|12/13/2026|Rolling Hills|1184
+Palm Beaches Marathon|West Palm Beach|FL|12/13/2026|Very Flat|886
+Tucson Marathon|Tucson|AZ|12/13/2026|Downhill|1125
+Dallas Marathon|Dallas|TX|12/13/2026|Rolling Hills|3947
+Bryan-College Station Marathon|College Station|TX|12/13/2026|Mostly Flat|559
+Mississippi Gulf Coast Marathon|Biloxi|MS|12/13/2026|Very Flat|766
+Brownsville Chief of Police Marathon|Brownsville|TX|12/13/2026|Mostly Flat|103
+Irving Frost Marathon|Irving|TX|12/19/2026|Mostly Flat|478
+St. Pete Marathon|St. Petersburg|FL|12/19/2026|Mostly Flat|0
+Hawaii Bird Conservation Marathon|Hilo|HI|12/20/2026|Downhill|112
+Corpus Christi Marathon|Corpus Christi|TX|12/27/2026|Very Flat|206
+Last Chance Marathon|Bellingham|WA|12/31/2026|Mostly Flat|40
