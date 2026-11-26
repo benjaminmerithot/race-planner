@@ -221,7 +221,8 @@ fs.writeFileSync('data/races-built.json', JSON.stringify(races.map(({ id, lat, l
 fs.writeFileSync('data.js', 'const GEO=' + JSON.stringify(geo) + ';\nconst RACES=' + JSON.stringify(races) + ';\nconst REG=' + JSON.stringify(reg) + ';\n');
 const tpl = fs.readFileSync('template.html', 'utf8');
 const data = fs.readFileSync('data.js', 'utf8');
-fs.writeFileSync('index.html', tpl.replace('/*DATA*/', () => data));
+const built = new Date(TODAY + 'T12:00:00Z').toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+fs.writeFileSync('index.html', tpl.replace('/*DATA*/', () => data).replace('{{BUILT}}', built));
 console.log('data.js', (fs.statSync('data.js').size / 1024).toFixed(0), 'KB', races.length, 'races');
 const off = races.filter(x => x.x < 0 || x.x > W || x.y < 0 || x.y > H);
 console.log('off-map:', off.map(x => x.id));
