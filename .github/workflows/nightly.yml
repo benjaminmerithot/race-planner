@@ -49,17 +49,26 @@ jobs:
           path: data/runsignup.json
           key: runsignup-${{ github.run_id }}
 
+      # NOAA 1991-2020 daily normals archive (165 MB), only unpacked when new
+      # race locations need a lookup
+      - name: Restore NOAA normals archive
+        uses: actions/cache@v4
+        with:
+          path: data/noaa/daily-temperature.tar.gz
+          key: noaa-normals-1991-2020-v1.0.1
+
       - name: Build, fill missing temps, build again
         run: |
           node build.mjs
-          node temps.mjs || echo "::warning::temps fetch stopped early; the rest fills in next run"
+          node normals.mjs || echo "::warning::NOAA normals step failed; using cached normals"
+          node temps.mjs || echo "::warning::Open-Meteo fallback stopped early; the rest fills in next run"
           node build.mjs
 
       - name: Commit temps and coverage changes
         run: |
           git config user.name "race-planner-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add temps.json COVERAGE.md
+          git add temps.json normals.json elevations.json COVERAGE.md
           git diff --cached --quiet || (git commit -m "Nightly refresh: temps and coverage" && git pull --rebase && git push)
 
       - name: Stage the page

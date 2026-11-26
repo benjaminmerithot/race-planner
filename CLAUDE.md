@@ -12,14 +12,16 @@ halves.txt          half marathons (date|name|city|st|dists|est|note); running.l
 demand.json         per-race demand level, note and 2025 weekend size (RunSignup Top 100)
 reg.json            hand-entered key dates (openings, lotteries, deadlines) for the registration feed
 labels.json         awards and labels per race id, each with a source URL
-temps.json          typical temps cache from Open-Meteo, by "lat,lon|MM-DD" (filled by temps.mjs)
+normals.json        typical temps from NOAA 1991-2020 daily normals, nearest similar-elevation station (normals.mjs); preferred
+temps.json          fallback typical temps from Open-Meteo history where no station is near (temps.mjs)
+elevations.json     race-site terrain elevations (Open-Meteo) used to pick NOAA stations
 ascent.json         ascent/descent in feet per race id (from ascent.mjs and courses/<id>.gpx)
 manual-geo.json     lat/lon overrides for towns the geocoders miss
 build.mjs           merges everything, geocodes, dedupes, projects to SVG coords, writes data.js and index.html, COVERAGE.md
 template.html       the whole UI; build injects data.js at /*DATA*/ and the build date at {{BUILT}}
 ```
 
-Local build: `npm ci && node fetch-runsignup.mjs && node build.mjs && node temps.mjs && node build.mjs`.
+Local build: `npm ci && node fetch-runsignup.mjs && node build.mjs && node normals.mjs && node temps.mjs && node build.mjs`.
 Without data/runsignup.json the build still works from the committed files. `BUILD_DATE=YYYY-MM-DD` pins "today" (defaults to today, US Eastern). index.html is a build output and is not committed.
 
 Nightly: `.github/workflows/nightly.yml` runs the same steps at 09:30 UTC, commits temps.json and COVERAGE.md, and deploys index.html to GitHub Pages. From 2027-01-01 RunSignup needs repo secrets `RSU_API_REG` and `RSU_API_REG_SECRET` (API caller registration).
@@ -41,7 +43,7 @@ Map geometry is pre-projected at build time (world-atlas, us-atlas, @geo-maps/ea
 
 1. **Pull listings automatically.** Done for the US via RunSignup. Canada: RunSignup has almost none and Race Roster has no public listings API (needs partner access).
 2. **Half-marathon coverage.** US states covered by RunSignup; see COVERAGE.md for thin regions (DC, WY, all provinces).
-3. **Typical temps.** Done via Open-Meteo (temps.mjs), backfilling up to 4,000 calls a night.
+3. **Typical temps.** Done: NOAA daily normals (normals.mjs) for ~97% of races; Open-Meteo fallback (temps.mjs) for the rest.
 4. **Ascent and descent.** Tooling done (ascent.mjs); needs course GPX files in courses/. Not shown in the UI yet (`asc` field).
 5. **Awards and labels.** labels.json: Abbott WMM + World Athletics 2026 label calendar (no tiers). Not shown in the UI yet (`labels` field). No Boston qualifier data.
 6. **Real race URLs.** Done for races found on RunSignup; the rest keep a web-search link.
