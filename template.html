@@ -144,6 +144,26 @@ td.num{text-align:right}
 .cd em{display:flex;gap:1px;align-items:center;font-style:normal}.cd em i{width:5px;height:5px;border-radius:50%}.cd em b{font-size:8px;font-weight:700;color:var(--mute)}
 .calday{margin:0 0 14px;scroll-margin-top:12px}.calday ol{max-height:320px;overflow-y:auto}
 .calhint{margin:0 0 10px;font-size:13px;color:var(--mute)}
+#planView .bib{margin-bottom:16px}
+#planView .bib header{align-items:center}
+.plist li{grid-template-columns:40px minmax(0,1fr) auto;align-items:start;padding:8px 16px}
+.plist .s+.s{margin-top:2px}
+.pact{display:flex;flex-direction:column;align-items:flex-end;gap:2px}
+.pact select{font:13px Archivo,sans-serif;min-height:32px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:0 8px}
+.pact .more{font-size:12px;min-height:28px;padding:0 2px;color:var(--mute)}
+.icsopt{display:flex;flex-wrap:wrap;gap:4px 16px;align-items:center;padding:8px 16px 12px;border-top:1px solid var(--line);font-size:12px;color:var(--mute)}
+.icsopt label{display:inline-flex;align-items:center;gap:6px;color:var(--ink);font-size:13px;cursor:pointer}
+.icsopt input{accent-color:var(--ink);margin:0}
+.pwarn{margin:0 0 16px;border:1px solid var(--line);border-left:4px solid #e5a400;border-radius:10px;padding:8px 14px;font-size:13px;background:var(--card)}
+.pwarn ul{margin:0;padding-left:18px}.pwarn li{margin:3px 0}
+.ptl{max-height:none}
+.ptl .mh{display:block;cursor:default;padding:10px 16px 2px;font:700 12px Archivo,sans-serif;text-transform:uppercase;letter-spacing:.04em;color:var(--mute)}
+.ptl .mh:hover{background:none}
+.kd{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:6px;vertical-align:0}
+.kd-race{background:var(--kf)}.kd-reg{background:#1d5bd6}.kd-train{background:var(--k5)}
+.pset{margin:0 0 16px;font-size:13px}.pset summary{cursor:pointer;font-weight:600}.pset p{color:var(--mute);margin:6px 0}
+.pset table{width:auto}.pset th,.pset td{padding:4px 8px;border:0;font-size:12px}.pset tbody th{text-align:left;color:var(--ink);font-weight:600}
+.pset input{width:56px;font:13px Archivo,sans-serif;min-height:30px;border-radius:6px;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:0 6px}
 .notes{margin-top:24px;font-size:13px;color:var(--mute);max-width:70ch}
 .notes p{margin:0 0 8px}
 @media(max-width:600px){table{font-size:13px}.stack thead{display:none}.stack tr{display:grid;padding-block:10px}.stack td{display:flow-root;border:0;padding:3px 0;padding-inline-start:8em;text-align:start}.stack td::before{content:attr(data-l);float:inline-start;width:7.5em;margin-inline-start:-8em;white-space:normal;color:var(--mute)}.stack td:empty{display:none}.stack tr{border-bottom:1px solid var(--line)}
@@ -181,7 +201,7 @@ td.num{text-align:right}
     </aside>
     <div class="viewcol">
       <div class="tools">
-        <span class="unit" role="group" aria-label="View"><button data-view="map" aria-pressed="true">Map</button><button data-view="list" aria-pressed="false">List</button><button data-view="cal" id="calBtn" aria-pressed="false">Calendar</button></span>
+        <span class="unit" role="group" aria-label="View"><button data-view="map" aria-pressed="true">Map</button><button data-view="list" aria-pressed="false">List</button><button data-view="cal" id="calBtn" aria-pressed="false">Calendar</button><button data-view="plan" id="planBtn" aria-pressed="false">Plan</button></span>
         <label id="sortWrap" hidden>Sort <select id="sort"><option value="date">Race date</option><option value="diff">Easiest course first</option><option value="diffd">Hardest course first</option><option value="pop">Most popular first</option><option value="size">Largest field first</option><option value="name">Name</option></select></label>
         <span class="vcount" id="count"></span>
       </div>
@@ -195,6 +215,20 @@ td.num{text-align:right}
       </div>
       <div id="listView" hidden><div class="scroll"><table class="stack" id="tbl"><thead><tr><th>Date</th><th>Race</th><th>Where</th><th>Distances</th><th>Popularity</th><th>Size</th><th>Course</th><th>Typical temp</th><th>Registration</th></tr></thead><tbody></tbody></table></div></div>
       <div id="calView" hidden><div class="calhint" id="calDay"></div><div class="cal" id="cal"></div></div>
+      <div id="planView" hidden>
+        <p class="calhint" id="planEmpty">Star races on the map, list or calendar (☆ on a race card) to build your plan here.</p>
+        <div id="planBody" hidden>
+          <p class="calhint">Your starred races. Filters don't apply here. Click a race to find it on the map.</p>
+          <section class="bib"><header><h2>Your season<small id="planSub"></small></h2><button class="chip" id="icsBtn">Download .ics</button></header><ol id="planList" class="plist"></ol>
+            <div class="icsopt"><span>Calendar file includes</span><label><input type="checkbox" data-ics="race">Race days</label><label><input type="checkbox" data-ics="reg">Registration dates</label><label><input type="checkbox" data-ics="train">Training and taper starts</label></div></section>
+          <div class="pwarn" id="planWarn" hidden></div>
+          <section class="bib"><header><h2>Timeline<small>Registration, training and race days, in order</small></h2></header><ol id="planTimeline" class="ptl"></ol></section>
+          <details class="pset"><summary>Plan settings</summary><p>Your own rules of thumb, in weeks. They set the training and taper dates and the spacing warnings.</p>
+            <table><thead><tr><th></th><th>Marathon</th><th>Half</th><th>10K</th><th>5K</th></tr></thead><tbody>
+            <tr><th>Training block</th><td><input type="number" min="0" max="40" id="pc-weeks-full" data-pc="weeks/full" aria-label="Training block full"></td><td><input type="number" min="0" max="40" id="pc-weeks-half" data-pc="weeks/half" aria-label="Training block half"></td><td><input type="number" min="0" max="40" id="pc-weeks-10k" data-pc="weeks/10k" aria-label="Training block 10k"></td><td><input type="number" min="0" max="40" id="pc-weeks-5k" data-pc="weeks/5k" aria-label="Training block 5k"></td></tr><tr><th>Taper</th><td><input type="number" min="0" max="40" id="pc-taper-full" data-pc="taper/full" aria-label="Taper full"></td><td><input type="number" min="0" max="40" id="pc-taper-half" data-pc="taper/half" aria-label="Taper half"></td><td><input type="number" min="0" max="40" id="pc-taper-10k" data-pc="taper/10k" aria-label="Taper 10k"></td><td><input type="number" min="0" max="40" id="pc-taper-5k" data-pc="taper/5k" aria-label="Taper 5k"></td></tr><tr><th>Gap before next race</th><td><input type="number" min="0" max="40" id="pc-gap-full" data-pc="gap/full" aria-label="Gap before next race full"></td><td><input type="number" min="0" max="40" id="pc-gap-half" data-pc="gap/half" aria-label="Gap before next race half"></td><td><input type="number" min="0" max="40" id="pc-gap-10k" data-pc="gap/10k" aria-label="Gap before next race 10k"></td><td><input type="number" min="0" max="40" id="pc-gap-5k" data-pc="gap/5k" aria-label="Gap before next race 5k"></td></tr>
+            </tbody></table></details>
+        </div>
+      </div>
     </div>
   </div>
   <div class="feeds">
@@ -328,8 +362,95 @@ function focusRace(id){const r=byId[id];if(!r)return;if(view!=='map')setView('ma
 
 /* ---------- widgets + table ---------- */
 let regAll=false,raceAll=false,regTab='key',tblLimit=150,calSel=null,view='map';
-const setView=v=>{view=v;document.querySelectorAll('[data-view]').forEach(x=>x.setAttribute('aria-pressed',x.dataset.view===v));$('#mapView').hidden=v!=='map';$('#listView').hidden=v!=='list';$('#calView').hidden=v!=='cal';$('#sortWrap').hidden=v!=='list';if(v==='map')drawPins();else hideTip()};
+const setView=v=>{view=v;document.querySelectorAll('[data-view]').forEach(x=>x.setAttribute('aria-pressed',x.dataset.view===v));$('#mapView').hidden=v!=='map';$('#listView').hidden=v!=='list';$('#calView').hidden=v!=='cal';$('#planView').hidden=v!=='plan';$('#sortWrap').hidden=v!=='list';if(v==='map')drawPins();else hideTip();if(v==='plan')renderPlan()};
 function li(id,date,title,sub,est){const d=parse(date);return '<li data-race="'+esc(id)+'" tabindex="0"><div class="num"><b>'+d.getDate()+'</b><span>'+MO[d.getMonth()]+'</span></div><div><div class="t">'+esc(title)+'</div><div class="s">'+sub+'</div></div><div class="left">'+esc(until(date))+(est?'<div class="est" style="margin:2px 0 0">est.</div>':'')+'</div></li>'}
+/* ---------- season plan (starred races) ---------- */
+const PDEF={weeks:{full:18,half:12,'10k':8,'5k':6},taper:{full:3,half:2,'10k':1,'5k':1},gap:{full:8,half:4,'10k':2,'5k':1}};
+let plan={dist:{},cfg:JSON.parse(JSON.stringify(PDEF)),ics:{race:true,reg:true,train:true}};
+try{const p=JSON.parse(localStorage.getItem('rp-plan')||'null');if(p){plan.dist=p.dist||{};['weeks','taper','gap'].forEach(k=>Object.assign(plan.cfg[k],(p.cfg||{})[k]||{}));Object.assign(plan.ics,p.ics||{})}}catch(e){}
+const savePlan=()=>{try{localStorage.setItem('rp-plan',JSON.stringify(plan))}catch(e){}};
+const iso=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const addDays=(s,n)=>{const d=parse(s);d.setDate(d.getDate()+n);return iso(d)};
+const usd=n=>'$'+(Number.isInteger(n)?n:n.toFixed(2));
+const DL={full:'marathon',half:'half marathon','10k':'10K','5k':'5K'};
+const planDist=r=>plan.dist[r.id]&&r.dists.includes(plan.dist[r.id])?plan.dist[r.id]:ORDER.find(d=>r.dists.includes(d));
+const planRaces=()=>[...saved].map(id=>byId[id]).filter(r=>r&&upcoming(r)).sort((a,b)=>a.date<b.date?-1:1);
+const tStr=r=>r.temp?'typical '+T(r.temp[0])+' to '+T(r.temp[1]):'';
+/* registration steps: price periods from the listing source, plus hand-entered key dates */
+function regItems(r){
+  const out=[],t0=iso(today),fees=r.fees||[],note=r.feeDist&&r.feeDist!==planDist(r)?' (price for the '+DL[r.feeDist]+')':'';
+  if(fees.length&&fees[0][0]>t0)out.push({d:fees[0][0],k:'reg',label:'Registration opens',sub:usd(fees[0][2])+note});
+  for(let i=0;i+1<fees.length;i++)if(fees[i+1][2]>fees[i][2]&&fees[i][1]>=t0)out.push({d:fees[i][1],k:'reg',label:'Last day at '+usd(fees[i][2]),sub:'Then '+usd(fees[i+1][2])+note});
+  if(fees.length){const c=fees[fees.length-1][1];if(c>=t0&&c<r.date)out.push({d:c,k:'reg',label:'Registration closes',sub:'Last price '+usd(fees[fees.length-1][2])+note})}
+  REG.filter(g=>g.id===r.id&&g.d>=t0).forEach(g=>{if(out.some(o=>o.d===g.d)&&/^(Price increases|Registration (opens|closes))/.test(g.label))return;out.push({d:g.d,k:'reg',label:g.label,sub:'',est:g.est})});
+  return out;
+}
+/* every dated step for one race: registration, training start, taper, race day */
+function planItems(r){
+  const d=planDist(r),c=plan.cfg,t0=iso(today),out=regItems(r);
+  const ts=addDays(r.date,-7*c.weeks[d]),tp=addDays(r.date,-7*c.taper[d]);
+  if(ts>=t0)out.push({d:ts,k:'train',label:'Training starts',sub:c.weeks[d]+'-week '+DL[d]+' block'});
+  if(tp>=t0&&tp<r.date)out.push({d:tp,k:'train',label:'Taper starts',sub:c.taper[d]+' week'+(c.taper[d]===1?'':'s')+' to race day'});
+  out.push({d:r.date,k:'race',label:'Race day',sub:DN[d]+' · '+r.city+', '+r.region+(r.temp?' · '+tStr(r):''),est:r.est});
+  return out.map(o=>({...o,r}));
+}
+function planWarnings(list){
+  const w=[],c=plan.cfg,t0=iso(today);
+  for(let i=1;i<list.length;i++){const a=list[i-1],b=list[i],da=planDist(a),days=Math.round((parse(b.date)-parse(a.date))/DAY),gap=days/7,gapTxt=days<14?days+' days':Math.floor(gap)+' weeks';
+    if(a.date===b.date)w.push(esc(a.name)+' and '+esc(b.name)+' are on the same day.');
+    else if(gap<c.gap[da])w.push('Only '+gapTxt+' between '+esc(a.name)+' ('+DL[da]+') and '+esc(b.name)+'. Your setting is '+c.gap[da]+' weeks after a '+DL[da]+'.')}
+  list.forEach(r=>{const d=planDist(r),wk=Math.floor((parse(r.date)-today)/DAY/7);
+    if(wk<c.weeks[d])w.push(esc(r.name)+' is '+wk+' week'+(wk===1?'':'s')+' away, shorter than your '+c.weeks[d]+'-week '+DL[d]+' block (it would have started '+esc(fmt(addDays(r.date,-7*c.weeks[d])))+').');
+    if(r.est)w.push(esc(r.name)+': the date is projected from last year. Confirm it on the race site before you book.');
+    if(soldOut(r))w.push(esc(r.name)+' is marked '+esc(r.status.toLowerCase())+'.')});
+  return w;
+}
+function renderPlan(){
+  const list=planRaces();
+  $('#planBtn').textContent='Plan'+(list.length?' ('+list.length+')':'');
+  if(view!=='plan')return;
+  $('#planEmpty').hidden=!!list.length;$('#planBody').hidden=!list.length;
+  if(!list.length)return;
+  $('#planSub').textContent=list.length+' race'+(list.length===1?'':'s')+', '+fmtS(list[0].date)+' to '+fmt(list[list.length-1].date);
+  $('#planList').innerHTML=list.map(r=>{const d=planDist(r),g=regItems(r).sort((a,b)=>a.d<b.d?-1:1)[0],day=parse(r.date);
+    return '<li data-race="'+esc(r.id)+'" tabindex="0"><div class="num"><b>'+day.getDate()+'</b><span>'+MO[day.getMonth()]+'</span></div><div><div class="t">'+esc(r.name)+(r.est?'<span class="est">est.</span>':'')+'</div><div class="s">'+esc(r.city+', '+r.region)+' · '+esc(until(r.date))+(r.temp?' · '+esc(tStr(r)):'')+'</div>'+
+      '<div class="s">'+(soldOut(r)?'<span class="so-badge">'+esc(r.status)+'</span>':esc(r.status))+(g?' · next: '+esc(fmtS(g.d))+', '+esc(g.label)+(g.sub?' ('+esc(g.sub)+')':''):'')+'</div></div>'+
+      '<div class="pact"><select data-pdist="'+esc(r.id)+'" aria-label="Distance you are running">'+ORDER.filter(x=>r.dists.includes(x)).map(x=>'<option value="'+x+'"'+(x===d?' selected':'')+'>'+DN[x]+'</option>').join('')+'</select><button class="more" data-star="'+esc(r.id)+'">Remove</button></div></li>'}).join('');
+  const w=planWarnings(list);
+  $('#planWarn').innerHTML=w.length?'<ul>'+w.map(x=>'<li>'+x+'</li>').join('')+'</ul>':'';$('#planWarn').hidden=!w.length;
+  const items=list.flatMap(planItems).sort((a,b)=>a.d<b.d?-1:a.d>b.d?1:(a.k==='race')-(b.k==='race'));
+  let h='',m='';
+  for(const it of items){const mk=it.d.slice(0,7);if(mk!==m){m=mk;h+='<li class="mh">'+MO[+mk.slice(5)-1]+' '+mk.slice(0,4)+'</li>'}
+    h+=li(it.r.id,it.d,it.label+': '+it.r.name,'<span class="kd kd-'+it.k+'"></span>'+esc(it.sub||''),it.est)}
+  $('#planTimeline').innerHTML=h;
+  ['weeks','taper','gap'].forEach(k=>ORDER.forEach(d=>{const el=$('#pc-'+k+'-'+d);if(el&&document.activeElement!==el)el.value=plan.cfg[k][d]}));
+  document.querySelectorAll('[data-ics]').forEach(x=>x.checked=!!plan.ics[x.dataset.ics]);
+}
+/* .ics export: all-day events, built in the browser */
+function icsText(){
+  const esc2=s=>String(s).replace(/\\/g,'\\\\').replace(/\n/g,'\\n').replace(/([,;])/g,'\\$1');
+  const enc=new TextEncoder();
+  const fold=l=>{let out='',cur='';for(const ch of l){if(enc.encode(cur+ch).length>74){out+=cur+'\r\n ';cur=ch}else cur+=ch}return out+cur};
+  const stamp=new Date().toISOString().replace(/[-:]/g,'').replace(/\.\d+/,'');
+  const L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//race-planner//season plan//EN','CALSCALE:GREGORIAN','X-WR-CALNAME:Race plan'];
+  planRaces().flatMap(planItems).filter(it=>plan.ics[it.k]).forEach(it=>{const r=it.r;
+    L.push('BEGIN:VEVENT','UID:'+r.id+'-'+it.k+'-'+it.label.replace(/[^a-z]/gi,'').toLowerCase()+'-'+it.d+'@race-planner','DTSTAMP:'+stamp,
+      'DTSTART;VALUE=DATE:'+it.d.replace(/-/g,''),'DTEND;VALUE=DATE:'+addDays(it.d,1).replace(/-/g,''),
+      'SUMMARY:'+esc2((it.k==='race'?'🏁 ':'')+it.label+': '+r.name),'LOCATION:'+esc2(r.city+', '+r.region),
+      'DESCRIPTION:'+esc2([it.sub,it.est?'Date is projected; confirm on the race site.':'',r.url].filter(Boolean).join('\n')),
+      'URL:'+r.url,'TRANSP:TRANSPARENT','END:VEVENT')});
+  L.push('END:VCALENDAR');
+  return L.map(fold).join('\r\n')+'\r\n';
+}
+function downloadIcs(){
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([icsText()],{type:'text/calendar'}));
+  a.download='race-plan-'+iso(today)+'.ics';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500);
+}
+document.addEventListener('change',e=>{
+  const s=e.target.closest('[data-pdist]');if(s){plan.dist[s.dataset.pdist]=s.value;savePlan();renderPlan();return}
+  const c=e.target.closest('[data-pc]');if(c){const[k,d]=c.dataset.pc.split('/');const v=Math.max(0,Math.min(40,Math.round(+c.value)||0));plan.cfg[k][d]=v;savePlan();renderPlan();return}
+  const x=e.target.closest('[data-ics]');if(x){plan.ics[x.dataset.ics]=x.checked;savePlan();return}
+});
 function renderCal(list){
   const by={};list.forEach(r=>{(by[r.date]=by[r.date]||[]).push(r)});
   /* one calendar year, Jan to Dec: this year, or next year from November on */const start=new Date(today.getFullYear()+(today.getMonth()>=10?1:0),0,1);$('#calBtn').textContent='Calendar '+start.getFullYear();let h='';
@@ -359,6 +480,7 @@ function render(){
   const shown=sorted.slice(0,tblLimit);
   $('#tbl tbody').innerHTML=sorted.length?shown.map(r=>{const g=nextReg(r);const so=soldOut(r);return '<tr data-race="'+esc(r.id)+'"'+(so?' class="so"':'')+'><td class="nw">'+esc(fmtS(r.date))+(r.est?'<span class="est">est.</span>':'')+'</td><td><strong class="nm">'+(saved.has(r.id)?'★ ':'')+esc(r.name)+'</strong>'+(so?' <span class="so-badge">'+esc(r.status)+'</span>':'')+'</td><td>'+esc(r.city+', '+r.region)+'</td><td><div class="tags">'+ORDER.slice().reverse().filter(d=>r.dists.includes(d)).map(d=>'<span class="tag" style="--c:'+DC[d]+'">'+DN[d]+'</span>').join('')+'</div></td><td class="nw">'+(POP(r)?popHTML(r):'')+(r.dem&&r.dem!=='high'?'<div style="font-size:11px;color:var(--mute)">'+esc(DEM[r.dem])+'</div>':'')+'</td><td class="nw num">'+(SIZE(r)?fmtN(SIZE(r)):'')+'</td><td class="nw">'+(r.diff?'<span class="dmini">'+[1,2,3,4,5].map(i=>'<i class="'+(i<=r.diff?'f':'')+'"></i>').join('')+'</span>':'')+esc(r.profile)+'</td><td class="nw">'+(r.temp?T(r.temp[0])+' to '+T(r.temp[1]):'')+'</td><td>'+(so?'':esc(r.status))+(g?'<div style="font-size:12px;color:var(--mute)">'+esc(fmtS(g.d))+(g.est?' (est.)':'')+'</div>':'')+'</td></tr>'}).join('')+(sorted.length>tblLimit?'<tr><td colspan="9"><button class="more" id="tblMore">Show '+Math.min(200,sorted.length-tblLimit)+' more of '+(sorted.length-tblLimit)+'</button></td></tr>':''):'<tr><td colspan="9" style="color:var(--mute)">No races match these filters. Turn a distance back on or clear the search.</td></tr>';
   renderCal(list);
+  renderPlan();
   drawPins();
 }
 document.addEventListener('click',e=>{
@@ -368,7 +490,8 @@ document.addEventListener('click',e=>{
   const cd=e.target.closest('.cd[data-day]');if(cd){calSel=cd.dataset.day;render();$('#calDay').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth',block:'nearest'});return}
   if(e.target.id==='regBtn'){regAll=!regAll;render()}
   if(e.target.id==='raceBtn'){raceAll=!raceAll;render()}
-  const row=e.target.closest('[data-race]');if(row&&!e.target.closest('a,[data-star]'))focusRace(row.dataset.race);
+  if(e.target.id==='icsBtn'){downloadIcs();return}
+  const row=e.target.closest('[data-race]');if(row&&!e.target.closest('a,[data-star],select,input,button,label,summary'))focusRace(row.dataset.race);
 });
 document.addEventListener('keydown',e=>{const row=e.target.closest&&e.target.closest('li[data-race]');if(row&&e.key==='Enter')focusRace(row.dataset.race)});
 document.addEventListener('mouseover',e=>{const row=e.target.closest('tr[data-race],li[data-race]');Object.values(pinEls).forEach(c=>c.classList.toggle('on',!!row&&c.dataset.id===row.dataset.race||c.dataset.id===tipId))});
