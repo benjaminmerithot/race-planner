@@ -177,7 +177,6 @@ td.num{text-align:right}
       <div class="tools">
         <span class="unit" role="group" aria-label="View"><button data-view="map" aria-pressed="true">Map</button><button data-view="list" aria-pressed="false">List</button><button data-view="cal" aria-pressed="false">12-month calendar</button></span>
         <label id="sortWrap" hidden>Sort <select id="sort"><option value="date">Race date</option><option value="diff">Easiest course first</option><option value="diffd">Hardest course first</option><option value="pop">Most popular first</option><option value="size">Largest field first</option><option value="name">Name</option></select></label>
-        <span class="unit" role="group" aria-label="Temperature unit"><button data-u="F" aria-pressed="true">°F</button><button data-u="C" aria-pressed="false">°C</button></span>
         <span class="vcount" id="count"></span>
       </div>
       <div id="mapView">
@@ -221,13 +220,12 @@ const DAY=86400000;
 const today=new Date();today.setHours(0,0,0,0);
 const parse=s=>{const[y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)};
 const byId=Object.fromEntries(RACES.map(r=>[r.id,r]));
-let unit='F';
 const st={d:new Set(['5k','10k','half','full']),c:'all',q:'',saved:false,sort:'date',mon:'all',course:'any',pop:0,entry:'any',size:0,temp:'any',hideSo:false};
 let saved=new Set();
-try{saved=new Set(JSON.parse(localStorage.getItem('rp-saved')||'[]'));const u=localStorage.getItem('rp-unit');if(u)unit=u}catch(e){}
-const persist=()=>{try{localStorage.setItem('rp-saved',JSON.stringify([...saved]));localStorage.setItem('rp-unit',unit)}catch(e){}};
+try{saved=new Set(JSON.parse(localStorage.getItem('rp-saved')||'[]'));}catch(e){}
+const persist=()=>{try{localStorage.setItem('rp-saved',JSON.stringify([...saved]))}catch(e){}};
 
-const T=f=>unit==='F'?Math.round(f)+'°F':Math.round((f-32)*5/9)+'°C';
+const T=f=>Math.round(f)+'°F';
 const fmt=s=>{const d=parse(s);return MO[d.getMonth()]+' '+d.getDate()+', '+d.getFullYear()};
 const fmtS=s=>{const d=parse(s);return MO[d.getMonth()]+' '+d.getDate()};
 const until=s=>{const n=Math.round((parse(s)-today)/DAY);if(n<0)return 'past';if(n===0)return 'today';if(n===1)return 'tomorrow';if(n<14)return 'in '+n+' days';if(n<70)return 'in '+Math.round(n/7)+' wks';return 'in '+Math.round(n/30.4)+' mo'};
@@ -374,7 +372,7 @@ document.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{st.c=b.datase
 $('#f-saved').onclick=()=>{st.saved=!st.saved;$('#f-saved').setAttribute('aria-pressed',st.saved);hideTip();render()};
 $('#q').oninput=e=>{st.q=e.target.value.trim().toLowerCase();hideTip();render()};
 $('#sort').onchange=e=>{st.sort=e.target.value;render()};
-document.querySelectorAll('.unit button[data-u]').forEach(b=>{b.setAttribute('aria-pressed',b.dataset.u===unit);b.onclick=()=>{unit=b.dataset.u;document.querySelectorAll('.unit button[data-u]').forEach(x=>x.setAttribute('aria-pressed',x===b));persist();tempLabels();render();if(tipId)showTip(tipId,pinned)}});tempLabels();
+tempLabels();
 {const ms=new Set(RACES.filter(upcoming).map(r=>r.date.slice(0,7)));$('#fMon').innerHTML+= [...ms].sort().map(m=>'<option value="'+m+'">'+MO[+m.slice(5)-1]+' '+m.slice(0,4)+'</option>').join('');}
 const bindSel=(id,k,num)=>$(id).onchange=e=>{st[k]=num?+e.target.value:e.target.value;hideTip();render()};
 bindSel('#fMon','mon');bindSel('#fCourse','course');bindSel('#fPop','pop',1);bindSel('#fEntry','entry');bindSel('#fSize','size',1);bindSel('#fTemp','temp');
