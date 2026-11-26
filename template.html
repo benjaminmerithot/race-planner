@@ -51,6 +51,17 @@ main{padding:22px max(4vw,16px) 36px}
 .side .fs select{max-width:none;width:100%}
 .side .f2 .chip{justify-content:center}
 .checks{border:0;margin:0;padding:0}
+.mfield b{font-weight:600;color:var(--ink);margin-left:4px}
+.mrange{position:relative;height:26px;margin:2px 0 0}
+.mtrack{position:absolute;left:9px;right:9px;top:11px;height:4px;border-radius:2px;background:var(--line)}
+.mfill{position:absolute;top:0;bottom:0;border-radius:2px;background:var(--ink)}
+.mrange input{position:absolute;left:0;top:4px;width:100%;height:18px;margin:0;background:none;-webkit-appearance:none;appearance:none;pointer-events:none}
+.mrange input::-webkit-slider-runnable-track{background:none;height:18px}
+.mrange input::-moz-range-track{background:none}
+.mrange input::-webkit-slider-thumb{-webkit-appearance:none;pointer-events:auto;width:18px;height:18px;border-radius:50%;background:var(--card);border:2px solid var(--ink);cursor:grab}
+.mrange input::-moz-range-thumb{pointer-events:auto;width:14px;height:14px;border-radius:50%;background:var(--card);border:2px solid var(--ink);cursor:grab}
+.mrange input:focus-visible{outline:none}.mrange input:focus-visible::-webkit-slider-thumb{outline:2px solid #1d5bd6;outline-offset:2px}
+.mends{display:flex;justify-content:space-between;font-size:11px;color:var(--mute);font-weight:500}
 .checks legend{padding:0;margin-bottom:2px;font:600 12px Archivo,sans-serif;color:var(--mute)}
 .cl{display:grid;gap:0 10px}.cl3{grid-template-columns:repeat(3,minmax(0,1fr))}
 .cl label{display:flex;align-items:center;gap:7px;font:13px Archivo,sans-serif;color:var(--ink);min-height:28px;cursor:pointer;white-space:nowrap}
@@ -189,7 +200,7 @@ td.num{text-align:right}
       <input class="search" id="q" type="search" placeholder="Search race or city" aria-label="Search races">
     </div>
     <div class="filters f2" role="group" aria-label="More filters">
-      <fieldset class="fs checks" id="fMon"><legend>When</legend><div class="cl cl3"></div></fieldset>
+      <div class="fs mfield" role="group" aria-label="Months"><span>When <b id="mOut">Any month</b></span><div class="mrange"><div class="mtrack"><div class="mfill" id="mFill"></div></div><input type="range" id="mLo" min="0" max="0" step="1" value="0" aria-label="From month"><input type="range" id="mHi" min="0" max="0" step="1" value="0" aria-label="To month"></div><div class="mends"><span id="mFirst"></span><span id="mLast"></span></div></div>
       <label class="fs">Course <select id="fCourse"><option value="any">Any course</option><option value="fast">Flat or fast (1–2)</option><option value="mod">Moderate (3)</option><option value="hard">Hilly (4–5)</option><option value="rated">Rated courses only</option></select></label>
       <label class="fs">Popularity <select id="fPop"><option value="0">Any</option><option value="2">2+ dots</option><option value="3">3+ dots</option><option value="4">4+ dots (major races)</option></select></label>
       <label class="fs">Entry <select id="fEntry"><option value="any">Any</option><option value="open">Open entry (no lottery or sell-out)</option><option value="hard">Lottery, qualifier or sells out</option></select></label>
@@ -505,12 +516,22 @@ document.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{st.c=b.datase
 $('#f-saved').onclick=()=>{st.saved=!st.saved;$('#f-saved').setAttribute('aria-pressed',st.saved);hideTip();render()};
 $('#q').oninput=e=>{st.q=e.target.value.trim().toLowerCase();hideTip();render()};
 $('#sort').onchange=e=>{st.sort=e.target.value;render()};
-{const ms=new Set(RACES.filter(upcoming).map(r=>r.date.slice(0,7)));$('#fMon .cl').innerHTML=[...ms].sort().map(m=>'<label><input type="checkbox" value="'+m+'">'+MO[+m.slice(5)-1]+' '+m.slice(0,4)+'</label>').join('');}
+/* month range: two handles over the months that have upcoming races; full range = any month */
+const MS=[...new Set(RACES.filter(upcoming).map(r=>r.date.slice(0,7)))].sort();
+const mName=m=>MO[+m.slice(5)-1]+' '+m.slice(0,4);
+const setMonths=(lo,hi,src)=>{const L=$('#mLo'),H=$('#mHi');if(lo>hi){if(src===H)hi=lo;else lo=hi}L.value=lo;H.value=hi;
+  const n=MS.length-1,pct=i=>n?i/n*100:0;$('#mFill').style.left=pct(lo)+'%';$('#mFill').style.right=(100-pct(hi))+'%';
+  const full=lo===0&&hi===n;$('#mOut').textContent=full?'Any month':lo===hi?mName(MS[lo]):mName(MS[lo])+' to '+mName(MS[hi]);
+  L.setAttribute('aria-valuetext',mName(MS[lo]));H.setAttribute('aria-valuetext',mName(MS[hi]));
+  L.style.zIndex=lo>=n-1?3:1;H.style.zIndex=2;
+  st.mons=full?new Set():new Set(MS.slice(lo,hi+1))};
+['#mLo','#mHi'].forEach(id=>{$(id).max=MS.length-1});$('#mFirst').textContent=mName(MS[0]);$('#mLast').textContent=mName(MS[MS.length-1]);setMonths(0,MS.length-1);
+['#mLo','#mHi'].forEach(id=>$(id).addEventListener('input',e=>{setMonths(+$('#mLo').value,+$('#mHi').value,e.target);hideTip();render()}));
 const bindChecks=(id,k)=>$(id).onchange=()=>{st[k]=new Set([...$(id).querySelectorAll('input:checked')].map(i=>i.value));hideTip();render()};
 const bindSel=(id,k,num)=>$(id).onchange=e=>{st[k]=num?+e.target.value:e.target.value;hideTip();render()};
-bindChecks('#fMon','mons');bindSel('#fCourse','course');bindSel('#fPop','pop',1);bindSel('#fEntry','entry');bindSel('#fSize','size',1);bindChecks('#fTemp','temps');
+bindSel('#fCourse','course');bindSel('#fPop','pop',1);bindSel('#fEntry','entry');bindSel('#fSize','size',1);bindChecks('#fTemp','temps');
 $('#f-hideso').onclick=()=>{st.hideSo=!st.hideSo;$('#f-hideso').setAttribute('aria-pressed',st.hideSo);render()};
-$('#f-reset').onclick=()=>{Object.assign(st,{mons:new Set(),course:'any',pop:0,entry:'any',size:0,temps:new Set(),hideSo:false,q:'',saved:false,c:'all'});st.d=new Set(['5k','10k','half','full']);['#fCourse','#fPop','#fEntry','#fSize'].forEach(s=>$(s).selectedIndex=0);document.querySelectorAll('.checks input').forEach(i=>i.checked=false);$('#q').value='';document.querySelectorAll('.chip[data-d]').forEach(b=>b.setAttribute('aria-pressed','true'));$('#f-saved').setAttribute('aria-pressed','false');$('#f-hideso').setAttribute('aria-pressed','false');document.querySelectorAll('.seg button').forEach(x=>x.setAttribute('aria-pressed',x.dataset.c==='all'));hideTip();render()};
+$('#f-reset').onclick=()=>{Object.assign(st,{mons:new Set(),course:'any',pop:0,entry:'any',size:0,temps:new Set(),hideSo:false,q:'',saved:false,c:'all'});st.d=new Set(['5k','10k','half','full']);['#fCourse','#fPop','#fEntry','#fSize'].forEach(s=>$(s).selectedIndex=0);document.querySelectorAll('.checks input').forEach(i=>i.checked=false);setMonths(0,MS.length-1);$('#q').value='';document.querySelectorAll('.chip[data-d]').forEach(b=>b.setAttribute('aria-pressed','true'));$('#f-saved').setAttribute('aria-pressed','false');$('#f-hideso').setAttribute('aria-pressed','false');document.querySelectorAll('.seg button').forEach(x=>x.setAttribute('aria-pressed',x.dataset.c==='all'));hideTip();render()};
 const roBox=new ResizeObserver(()=>{drawPins();if(tipId)showTip(tipId,pinned)});roBox.observe(box);
 render();
 }
