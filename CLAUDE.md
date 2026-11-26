@@ -54,6 +54,7 @@ Map geometry is pre-projected at build time (world-atlas, us-atlas, @geo-maps/ea
 
 - Filters in a left column (1/4); the right 3/4 switches between Map, List and a Jan-Dec calendar (this year, next year from November), all driven by the same filters. Registration and Race days cards side by side below. Plain header, no colored band.
 - Clicking a race anywhere (list row, calendar day, feeds) switches to the map and opens its card.
+- Pins that would sit on top of each other at the current zoom become a numbered bubble (3+) coloured by its most common distance, or a small ring (2). Clicking a bubble zooms in; if its races share one spot (same town) it opens a date-sorted list instead.
 - Zoom must stay gentle. Type stays compact. Dropdown carets are padded custom chevrons.
 - Sold-out rows: struck-through red name, dimmed row, red badge.
 - Avoid em-dash-heavy or AI-sounding copy.

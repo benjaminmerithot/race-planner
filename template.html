@@ -79,6 +79,14 @@ main{padding:22px max(4vw,16px) 36px}
 .pin{stroke:var(--water);stroke-width:2;cursor:pointer;transition:r .15s}
 .pin.on{stroke:var(--ink);stroke-width:3}
 .pin.saved{stroke:#ffd43b;stroke-width:3}
+.bub{cursor:pointer}.bub circle{stroke:var(--ink);stroke-width:2.5}
+.bub text{fill:#fff;font-family:Archivo,sans-serif;font-weight:800;text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.bub:hover circle,.bub.on circle,.bub:focus-visible circle{stroke:#1d5bd6;stroke-width:3.5}.bub:focus-visible{outline:none}
+.blist{list-style:none;margin:6px -14px 0;padding:0;max-height:260px;overflow-y:auto;overscroll-behavior:contain;border-top:1px solid var(--line)}
+.blist button{appearance:none;border:0;background:none;color:var(--ink);font:13px Archivo,sans-serif;text-align:left;width:100%;display:grid;grid-template-columns:48px minmax(0,1fr);gap:8px;padding:5px 14px;cursor:pointer}
+.blist button:hover,.blist button:focus-visible{background:color-mix(in srgb,var(--band) 9%,transparent)}
+.blist b{font-weight:700;white-space:nowrap}.blist span{line-height:1.3}.blist i{display:block;font-style:normal;font-size:11px;color:var(--mute)}
+.bhint{font-size:12px;color:var(--mute);margin-top:8px}
 .zoom{position:absolute;right:10px;top:10px;display:flex;flex-direction:column;gap:6px}
 .zoom button{width:34px;height:34px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:700 17px Archivo,sans-serif;cursor:pointer}
 .legend{position:absolute;left:12px;top:10px;display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12px;color:var(--mute);background:color-mix(in srgb,var(--card) 85%,transparent);padding:6px 10px;border-radius:8px}
@@ -305,12 +313,13 @@ const tempOk=r=>!st.temps.size||(r.temp?[...st.temps].some(b=>TB[b]&&r.temp[0]>=
 const svg=$('#map');const NS='http://www.w3.org/2000/svg';
 svg.setAttribute('viewBox','0 0 '+GEO.W+' '+GEO.H);
 svg.innerHTML='<g id="world"><path class="land ctx" d="'+GEO.mx+'"/><path class="land ca" d="'+GEO.ca+'"/><path class="land" d="'+GEO.us+'"/><path class="states" d="'+GEO.states+'"/><path class="lake" d="'+GEO.lakes+'"/></g>'+
- '<g id="inset"><rect class="hiframe" x="'+GEO.akBox.x+'" y="'+GEO.akBox.y+'" width="'+GEO.akBox.w+'" height="'+GEO.akBox.h+'" rx="8"/><path class="land" d="'+GEO.ak+'"/><text x="'+(GEO.akBox.x+10)+'" y="'+(GEO.akBox.y+GEO.akBox.h-10)+'" font-size="13" fill="currentColor" opacity=".55">Alaska</text><rect class="hiframe" x="'+GEO.hiBox.x+'" y="'+GEO.hiBox.y+'" width="'+GEO.hiBox.w+'" height="'+GEO.hiBox.h+'" rx="8"/><path class="land" d="'+GEO.hi+'"/><text x="'+(GEO.hiBox.x+10)+'" y="'+(GEO.hiBox.y+GEO.hiBox.h-10)+'" font-size="13" fill="currentColor" opacity=".55">Hawaii</text></g><g id="pins"></g>';
+ '<g id="inset"><rect class="hiframe" x="'+GEO.akBox.x+'" y="'+GEO.akBox.y+'" width="'+GEO.akBox.w+'" height="'+GEO.akBox.h+'" rx="8"/><path class="land" d="'+GEO.ak+'"/><text x="'+(GEO.akBox.x+10)+'" y="'+(GEO.akBox.y+GEO.akBox.h-10)+'" font-size="13" fill="currentColor" opacity=".55">Alaska</text><rect class="hiframe" x="'+GEO.hiBox.x+'" y="'+GEO.hiBox.y+'" width="'+GEO.hiBox.w+'" height="'+GEO.hiBox.h+'" rx="8"/><path class="land" d="'+GEO.hi+'"/><text x="'+(GEO.hiBox.x+10)+'" y="'+(GEO.hiBox.y+GEO.hiBox.h-10)+'" font-size="13" fill="currentColor" opacity=".55">Hawaii</text></g><g id="pins"></g><g id="bubs"></g>';
 const world=$('#world'),inset=$('#inset'),pinsG=$('#pins');
 let z={k:1,x:0,y:0};
 const isHI=r=>r.region==='HI'||r.region==='AK';
 let PR=7;
-{const done=new Set();RACES.forEach(a=>{if(done.has(a.id))return;const g=RACES.filter(b=>!done.has(b.id)&&isHI(b)===isHI(a)&&Math.hypot(a.x-b.x,a.y-b.y)<5);g.forEach((b,i)=>{done.add(b.id);const ang=2*Math.PI*i/g.length-Math.PI/2;b.ox=g.length>1?Math.cos(ang):0;b.oy=g.length>1?Math.sin(ang):0})})}
+/* overlapping pins: pairs fan into a small ring, 3+ become a numbered bubble (recomputed every draw) */
+let BUBS=[];const bubsG=svg.querySelector('#bubs');
 const place=r=>{const m=PR*1.15;const b=isHI(r)?[r.x,r.y]:[r.x*z.k+z.x,r.y*z.k+z.y];return[b[0]+(r.ox||0)*m,b[1]+(r.oy||0)*m]};
 const pinEls={};
 RACES.slice().sort((a,b)=>POP(a)-POP(b)||SIZE(a)-SIZE(b)).forEach(r=>{const c=document.createElementNS(NS,'circle');c.setAttribute('class','pin');c.setAttribute('r',7);c.dataset.id=r.id;c.setAttribute('tabindex','0');c.setAttribute('role','button');c.setAttribute('aria-label',r.name+', '+r.city);pinEls[r.id]=c;pinsG.appendChild(c)});
@@ -319,8 +328,25 @@ function drawPins(){
   world.setAttribute('transform','translate('+z.x+' '+z.y+') scale('+z.k+')');
   world.querySelector('.states').style.strokeWidth=(1/z.k);
   inset.style.display=z.k>1.05?'none':'';
+  // group visible pins that would overlap at this zoom
+  RACES.forEach(r=>{r.ox=0;r.oy=0;r.bub=-1});
+  const vis=RACES.filter(r=>match(r)&&upcoming(r)&&!(isHI(r)&&z.k>1.05));
+  const R=pr*0.55,grid=new Map(),base=r=>isHI(r)?[r.x,r.y]:[r.x*z.k+z.x,r.y*z.k+z.y],gk=(h,i,j)=>h+i+','+j;
+  vis.forEach(r=>{r._b=base(r);const k=gk(isHI(r)?'h':'m',Math.floor(r._b[0]/R),Math.floor(r._b[1]/R));(grid.get(k)||grid.set(k,[]).get(k)).push(r)});
+  const groups=[],used=new Set();
+  vis.slice().sort((a,b)=>POP(b)-POP(a)||SIZE(b)-SIZE(a)).forEach(a=>{if(used.has(a.id))return;const g=[a];used.add(a.id);const h=isHI(a)?'h':'m',ci=Math.floor(a._b[0]/R),cj=Math.floor(a._b[1]/R);
+    for(let i=ci-1;i<=ci+1;i++)for(let j=cj-1;j<=cj+1;j++)for(const b of grid.get(gk(h,i,j))||[])if(!used.has(b.id)&&Math.hypot(a._b[0]-b._b[0],a._b[1]-b._b[1])<R){g.push(b);used.add(b.id)}
+    groups.push(g)});
+  BUBS=[];
+  groups.forEach(g=>{if(g.length===2)g.forEach((b,i)=>{const ang=Math.PI*i-Math.PI/2;b.ox=Math.cos(ang);b.oy=Math.sin(ang)});
+    else if(g.length>2){const cx=g.reduce((s,b)=>s+b._b[0],0)/g.length,cy=g.reduce((s,b)=>s+b._b[1],0)/g.length;
+      const mx=g.reduce((s,b)=>s+b.x,0)/g.length,my=g.reduce((s,b)=>s+b.y,0)/g.length,ext=Math.max(...g.map(b=>Math.hypot(b.x-mx,b.y-my)));
+      g.forEach(b=>b.bub=BUBS.length);BUBS.push({rs:g,cx,cy,zoomable:!isHI(g[0])&&z.k<5.9&&ext*6>pr*0.9})}});
+  bubsG.innerHTML=BUBS.map((b,i)=>{const n=b.rs.length,rad=Math.min(pr*2.1,pr*(1.05+0.2*Math.log2(n)));const towns=[...new Set(b.rs.map(r=>r.city))];
+    const tc={};b.rs.forEach(r=>{const t=top(r);tc[t]=(tc[t]||0)+1});const dom=Object.keys(tc).sort((x,y)=>tc[y]-tc[x])[0];
+    return '<g class="bub" data-b="'+i+'" tabindex="0" role="button" aria-label="'+n+' races near '+esc(towns[0])+(towns.length>1?' and nearby':'')+'"><circle cx="'+b.cx+'" cy="'+b.cy+'" r="'+rad+'" fill="'+DC[dom]+'"/><text x="'+b.cx+'" y="'+b.cy+'" font-size="'+(pr*(n>99?0.95:1.1))+'">'+n+'</text></g>'}).join('');
   RACES.forEach(r=>{const c=pinEls[r.id];const[x,y]=place(r);c.setAttribute('cx',x);c.setAttribute('cy',y);
-    const show=match(r)&&upcoming(r)&&!(isHI(r)&&z.k>1.05);c.style.display=show?'':'none';
+    const show=match(r)&&upcoming(r)&&!(isHI(r)&&z.k>1.05)&&r.bub<0;c.style.display=show?'':'none';
     c.setAttribute('r',pr*(r.src&&!POP(r)?0.62:[0.62,0.7,0.82,0.95,1.08,1.2][POP(r)]));c.setAttribute('fill',DC[top(r)]);c.classList.toggle('saved',saved.has(r.id))});
 }
 const clampZ=()=>{z.k=Math.min(6,Math.max(1,z.k));z.x=Math.min(0,Math.max(GEO.W-GEO.W*z.k,z.x));z.y=Math.min(0,Math.max(GEO.H-GEO.H*z.k,z.y))};
@@ -330,10 +356,10 @@ svg.addEventListener('wheel',e=>{e.preventDefault();const[x,y]=svgPt(e);const dy
 $('#zin').onclick=()=>zoomAt(1.3,GEO.W/2,GEO.H/2);$('#zout').onclick=()=>zoomAt(1/1.3,GEO.W/2,GEO.H/2);
 $('#zreset').onclick=()=>{z={k:1,x:0,y:0};drawPins();hideTip()};
 let drag=null,moved=false;
-svg.addEventListener('pointerdown',e=>{if(e.target.classList.contains('pin'))return;drag={p:svgPt(e),x:z.x,y:z.y};moved=false;svg.setPointerCapture(e.pointerId)});
+svg.addEventListener('pointerdown',e=>{if(e.target.classList.contains('pin')||e.target.closest('.bub'))return;drag={p:svgPt(e),x:z.x,y:z.y};moved=false;svg.setPointerCapture(e.pointerId)});
 svg.addEventListener('pointermove',e=>{if(!drag)return;const p=svgPt(e);const dx=p[0]-drag.p[0],dy=p[1]-drag.p[1];if(Math.abs(dx)+Math.abs(dy)>3){moved=true;svg.classList.add('drag')}z.x=drag.x+dx;z.y=drag.y+dy;clampZ();drawPins()});
 svg.addEventListener('pointerup',()=>{drag=null;svg.classList.remove('drag')});
-svg.addEventListener('click',e=>{if(!e.target.classList.contains('pin')&&!moved)hideTip()});
+svg.addEventListener('click',e=>{if(!e.target.classList.contains('pin')&&!e.target.closest('.bub')&&!moved)hideTip()});
 
 /* ---------- hover card ---------- */
 const tip=$('#tip'),box=$('#mapbox');let tipId=null,pinned=false;
@@ -364,12 +390,32 @@ function showTip(id,pin){
   tip.style.left=L+'px';tip.style.top=Tp+'px';
   document.querySelectorAll('[data-race]').forEach(el=>el.classList.toggle('on',el.dataset.race===id));
 }
-function hideTip(){tip.style.display='none';tipId=null;pinned=false;Object.values(pinEls).forEach(c=>c.classList.remove('on'));document.querySelectorAll('[data-race].on').forEach(el=>el.classList.remove('on'))}
+function bubbleHTML(b){
+  const rs=b.rs.slice().sort((x,y)=>x.date<y.date?-1:1),towns=[...new Set(rs.map(r=>r.city+', '+r.region))];
+  return '<h3>'+rs.length+' races</h3><div class="meta">'+esc(towns[0])+(towns.length>1?' and '+(towns.length-1)+' nearby town'+(towns.length>2?'s':''):'')+'</div>'+
+    '<ol class="blist">'+rs.map(r=>'<li><button data-tid="'+esc(r.id)+'"><b>'+esc(fmtS(r.date))+'</b><span>'+(soldOut(r)?'⊘ ':'')+(saved.has(r.id)?'★ ':'')+esc(r.name)+'<i>'+r.dists.slice().sort((a,c)=>ORDER.indexOf(a)-ORDER.indexOf(c)).map(d=>DN[d]).join(', ')+'</i></span></button></li>').join('')+'</ol>'+
+    '<div class="bhint">'+(b.zoomable?'Click the bubble to zoom in, or pick a race.':'Pick a race to see its details.')+'</div>';
+}
+function showBubble(i,pin){
+  const b=BUBS[i];if(!b)return;tipId=null;pinned=!!pin;tip.innerHTML=bubbleHTML(b);tip.style.display='block';
+  bubsG.querySelectorAll('.bub').forEach(g=>g.classList.toggle('on',g.dataset.b===String(i)));
+  const bx=box.getBoundingClientRect(),px=b.cx*bx.width/GEO.W,py=b.cy*bx.height/GEO.H,tw=tip.offsetWidth,th=tip.offsetHeight;
+  let L=px+20,Tp=py-th/2;if(L+tw>bx.width-8)L=px-tw-20;if(L<8)L=8;Tp=Math.max(8,Math.min(bx.height-th-8,Tp));
+  tip.style.left=L+'px';tip.style.top=Tp+'px';
+}
+function hideTip(){tip.style.display='none';tipId=null;pinned=false;bubsG.querySelectorAll('.bub.on').forEach(g=>g.classList.remove('on'));Object.values(pinEls).forEach(c=>c.classList.remove('on'));document.querySelectorAll('[data-race].on').forEach(el=>el.classList.remove('on'))}
 pinsG.addEventListener('pointerover',e=>{const id=e.target.dataset.id;if(id&&!pinned)showTip(id)});
 pinsG.addEventListener('pointerout',e=>{if(e.target.dataset.id&&!pinned&&!tip.matches(':hover'))setTimeout(()=>{if(!pinned&&!tip.matches(':hover')&&!pinsG.querySelector('.pin:hover'))hideTip()},120)});
 pinsG.addEventListener('click',e=>{const id=e.target.dataset.id;if(id)showTip(id,true)});
 pinsG.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.dataset.id){e.preventDefault();showTip(e.target.dataset.id,true)}});
 tip.addEventListener('mouseleave',()=>{if(!pinned)hideTip()});
+const bubOf=e=>e.target.closest&&e.target.closest('.bub');
+const bubClick=g=>{const b=BUBS[+g.dataset.b];if(!b)return;if(b.zoomable)zoomAt(Math.min(2.5,6/z.k),b.cx,b.cy);else showBubble(+g.dataset.b,true)};
+bubsG.addEventListener('pointerover',e=>{const g=bubOf(e);if(g&&!pinned)showBubble(+g.dataset.b)});
+bubsG.addEventListener('pointerout',e=>{if(bubOf(e)&&!pinned)setTimeout(()=>{if(!pinned&&!tip.matches(':hover')&&!bubsG.querySelector('.bub:hover'))hideTip()},120)});
+bubsG.addEventListener('click',e=>{const g=bubOf(e);if(g)bubClick(g)});
+bubsG.addEventListener('keydown',e=>{const g=bubOf(e);if(g&&(e.key==='Enter'||e.key===' ')){e.preventDefault();bubClick(g)}});
+tip.addEventListener('click',e=>{const t=e.target.closest('[data-tid]');if(t)showTip(t.dataset.tid,true)});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')hideTip()});
 document.addEventListener('click',e=>{const s=e.target.closest('[data-star]');if(!s)return;const id=s.dataset.star;saved.has(id)?saved.delete(id):saved.add(id);persist();render();if(tipId===id)showTip(id,pinned)});
 function focusRace(id){const r=byId[id];if(!r)return;if(view!=='map')setView('map');if(!isHI(r)&&z.k<1.8){z.k=1.8;z.x=GEO.W/2-r.x*z.k;z.y=GEO.H/2-r.y*z.k;clampZ();drawPins()}showTip(id,true);box.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth',block:'nearest'})}
