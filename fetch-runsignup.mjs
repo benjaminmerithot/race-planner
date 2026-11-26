@@ -85,11 +85,20 @@ function normalize({ race }, region, country) {
 
 const all = new Map();
 const counts = {};
+// if a state's call fails, keep that state's races from the last snapshot
+const previous = fs.existsSync(OUT) ? JSON.parse(fs.readFileSync(OUT)).races : [];
+let failures = 0;
 const regions = [...STATES.map(s => [s, 'US']), ...PROVINCES.map(s => [s, 'CA'])];
 for (const [st, country] of regions) {
   let races;
   try { races = await get({ state: st, country_code: country }); }
-  catch (e) { console.error('skip', st, e.message); counts[st] = 'error'; continue; }
+  catch (e) {
+    failures++;
+    const kept = previous.filter(x => x.region === st && x.date >= TODAY);
+    kept.forEach(x => all.set(x.rsid, x));
+    console.error('failed', st, e.message, '- kept', kept.length, 'from last snapshot');
+    counts[st] = 'kept ' + kept.length; continue;
+  }
   let n = 0;
   for (const r of races) {
     const x = normalize(r, st, country);
@@ -105,3 +114,5 @@ const list = [...all.values()].sort((a, b) => a.date.localeCompare(b.date) || a.
 fs.mkdirSync('data', { recursive: true });
 fs.writeFileSync(OUT, JSON.stringify({ fetched: new Date().toISOString(), from: TODAY, to: END, races: list }));
 console.log('runsignup', list.length, 'races', JSON.stringify(counts));
+// every call failing (bad token, API down) is an error the nightly job should show
+if (failures === regions.length) { console.error('every RunSignup call failed'); process.exit(1); }
