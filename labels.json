@@ -1,0 +1,131 @@
+{
+ "_note": "Hand-entered labels with a source URL each. World Athletics labels are per edition; re-check the calendar each year.",
+ "races": {
+  "boston": [
+   {
+    "label": "Abbott World Marathon Majors",
+    "source": "https://www.worldmarathonmajors.com/"
+   },
+   {
+    "label": "World Athletics Label road race, 2026 calendar",
+    "source": "https://worldathletics.org/competitions/world-athletics-label-road-races"
+   }
+  ],
+  "chicago": [
+   {
+    "label": "Abbott World Marathon Majors",
+    "source": "https://www.worldmarathonmajors.com/"
+   },
+   {
+    "label": "World Athletics Label road race, 2026 calendar",
+    "source": "https://worldathletics.org/competitions/world-athletics-label-road-races"
+   }
+  ],
+  "nyc": [
+   {
+    "label": "Abbott World Marathon Majors",
+    "source": "https://www.worldmarathonmajors.com/"
+   },
+   {
+    "label": "World Athletics Label road race, 2026 calendar",
+    "source": "https://worldathletics.org/competitions/world-athletics-label-road-races"
+   }
+  ],
+  "houston": [
+   {
+    "label": "World Athletics Label road race, 2026 calendar (marathon and half)",
+    "source": "https://worldathletics.org/competitions/world-athletics-label-road-races"
+   }
+  ],
+  "nychalf": [
+   {
+    "label": "World Athletics Label road race, 2026 calendar",
+    "source": "https://worldathletics.org/competitions/world-athletics-label-road-races"
+   }
+  ],
+  "pittsburgh": [
+   {
+    "label": "World Athletics Label road race, 2026 calendar (half marathon)",
+    "source": "https://worldathletics.org/competitions/world-athletics-label-road-races"
+   }
+  ],
+  "boston5k": [
+   {
+    "label": "World Athletics Label road race, 2026 calendar",
+    "source": "https://worldathletics.org/competitions/world-athletics-label-road-races"
+   }
+  ],
+  "bolder": [
+   {
+    "label": "World Athletics Label road race, 2026 calendar",
+    "source": "https://worldathletics.org/competitions/world-athletics-label-road-races"
+   }
+  ],
+  "baa10k": [
+   {
+    "label": "World Athletics Label road race, 2026 calendar",
+    "source": "https://worldathletics.org/competitions/world-athletics-label-road-races"
+   }
+  ],
+  "peachtree": [
+   {
+    "label": "World Athletics Label road race, 2026 calendar",
+    "source": "https://worldathletics.org/competitions/world-athletics-label-road-races"
+   }
+  ],
+  "beacon": [
+   {
+    "label": "World Athletics Label road race, 2026 calendar",
+    "source": "https://worldathletics.org/competitions/world-athletics-label-road-races"
+   }
+  ],
+  "twincities": [
+   {
+    "label": "World Athletics Label road race, 2026 calendar",
+    "source": "https://worldathletics.org/competitions/world-athletics-label-road-races"
+   }
+  ],
+  "nycdash": [
+   {
+    "label": "World Athletics Label road race, 2026 calendar",
+    "source": "https://worldathletics.org/competitions/world-athletics-label-road-races"
+   }
+  ],
+  "philly": [
+   {
+    "label": "World Athletics Label road race, 2026 calendar",
+    "source": "https://worldathletics.org/competitions/world-athletics-label-road-races"
+   }
+  ],
+  "honolulu": [
+   {
+    "label": "World Athletics Label road race, 2026 calendar",
+    "source": "https://worldathletics.org/competitions/world-athletics-label-road-races"
+   }
+  ],
+  "f-marathon-project-gold-wave-az": [
+   {
+    "label": "World Athletics Label road race, 2026 calendar",
+    "source": "https://worldathletics.org/competitions/world-athletics-label-road-races"
+   }
+  ],
+  "ottawa": [
+   {
+    "label": "World Athletics Label road race, 2026 calendar",
+    "source": "https://worldathletics.org/competitions/world-athletics-label-road-races"
+   }
+  ],
+  "f-montreal-marathon-qc": [
+   {
+    "label": "World Athletics Label road race, 2026 calendar",
+    "source": "https://worldathletics.org/competitions/world-athletics-label-road-races"
+   }
+  ],
+  "torontowaterfront": [
+   {
+    "label": "World Athletics Label road race, 2026 calendar",
+    "source": "https://worldathletics.org/competitions/world-athletics-label-road-races"
+   }
+  ]
+ }
+}
