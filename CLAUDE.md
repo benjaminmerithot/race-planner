@@ -1,6 +1,6 @@
 # Race Planner: handoff brief
 
-A single-page race planner for the US and Canada: map, filters, registration and race-day feeds, sortable table, 12-month calendar, hover cards with demand, size, course difficulty and typical temps.
+A single-page race planner for the US and Canada: map, filters, registration and race-day feeds, sortable table, Jan-Dec calendar, hover cards with demand, size, course difficulty and typical temps.
 
 ## How it builds today
 
@@ -50,7 +50,7 @@ Map geometry is pre-projected at build time (world-atlas, us-atlas, @geo-maps/ea
 
 ## UI notes from the owner
 
-- Filters in a left column (1/4); the right 3/4 switches between Map, List and 12-month calendar, all driven by the same filters. Registration and Race days cards side by side below. Plain header, no colored band.
+- Filters in a left column (1/4); the right 3/4 switches between Map, List and a Jan-Dec calendar (this year, next year from November), all driven by the same filters. Registration and Race days cards side by side below. Plain header, no colored band.
 - Clicking a race anywhere (list row, calendar day, feeds) switches to the map and opens its card.
 - Zoom must stay gentle. Type stays compact. Dropdown carets are padded custom chevrons.
 - Sold-out rows: struck-through red name, dimmed row, red badge.

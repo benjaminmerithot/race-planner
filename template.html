@@ -181,7 +181,7 @@ td.num{text-align:right}
     </aside>
     <div class="viewcol">
       <div class="tools">
-        <span class="unit" role="group" aria-label="View"><button data-view="map" aria-pressed="true">Map</button><button data-view="list" aria-pressed="false">List</button><button data-view="cal" aria-pressed="false">12-month calendar</button></span>
+        <span class="unit" role="group" aria-label="View"><button data-view="map" aria-pressed="true">Map</button><button data-view="list" aria-pressed="false">List</button><button data-view="cal" id="calBtn" aria-pressed="false">Calendar</button></span>
         <label id="sortWrap" hidden>Sort <select id="sort"><option value="date">Race date</option><option value="diff">Easiest course first</option><option value="diffd">Hardest course first</option><option value="pop">Most popular first</option><option value="size">Largest field first</option><option value="name">Name</option></select></label>
         <span class="vcount" id="count"></span>
       </div>
@@ -332,7 +332,7 @@ const setView=v=>{view=v;document.querySelectorAll('[data-view]').forEach(x=>x.s
 function li(id,date,title,sub,est){const d=parse(date);return '<li data-race="'+esc(id)+'" tabindex="0"><div class="num"><b>'+d.getDate()+'</b><span>'+MO[d.getMonth()]+'</span></div><div><div class="t">'+esc(title)+'</div><div class="s">'+sub+'</div></div><div class="left">'+esc(until(date))+(est?'<div class="est" style="margin:2px 0 0">est.</div>':'')+'</div></li>'}
 function renderCal(list){
   const by={};list.forEach(r=>{(by[r.date]=by[r.date]||[]).push(r)});
-  const start=new Date(today.getFullYear(),today.getMonth(),1);let h='';
+  /* one calendar year, Jan to Dec: this year, or next year from November on */const start=new Date(today.getFullYear()+(today.getMonth()>=10?1:0),0,1);$('#calBtn').textContent='Calendar '+start.getFullYear();let h='';
   for(let m=0;m<12;m++){const d0=new Date(start.getFullYear(),start.getMonth()+m,1);const n=new Date(d0.getFullYear(),d0.getMonth()+1,0).getDate();const off=d0.getDay();let cells='';let cnt=0;
     for(let i=0;i<off;i++)cells+='<span></span>';
     for(let d=1;d<=n;d++){const k=d0.getFullYear()+'-'+String(d0.getMonth()+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');const rs=by[k]||[];cnt+=rs.length;const past=new Date(d0.getFullYear(),d0.getMonth(),d)<today;
