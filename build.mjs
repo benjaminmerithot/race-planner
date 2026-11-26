@@ -178,10 +178,17 @@ for (const x of RSU) {
 console.log('runsignup', RSU.length, 'listings:', rsuNew, 'new,', rsuUpgraded, 'imports upgraded,', rsuCurated, 'matched curated');
 console.log('imported', imported.length, 'unmatched', JSON.stringify(unmatched));
 const DEMAND = JSON.parse(fs.readFileSync('demand.json'));
-// Typical temps from Open-Meteo history (temps.mjs) for races without hand-researched temps.
+// Typical temps for races without hand-researched ones: NOAA 1991-2020 daily
+// normals at a nearby station (normals.mjs) first, else Open-Meteo history (temps.mjs).
+const NORMALS = fs.existsSync('normals.json') ? JSON.parse(fs.readFileSync('normals.json')) : {};
 const TEMPS = fs.existsSync('temps.json') ? JSON.parse(fs.readFileSync('temps.json')) : {};
 const tKey = (lat, lon, date) => `${(Math.round(lat * 10) / 10).toFixed(1)},${(Math.round(lon * 10) / 10).toFixed(1)}|${date.slice(5, 10)}`;
-for (const q of [...curated, ...imported]) if (!q.temp && TEMPS[tKey(q.lat, q.lon, q.date)]) q.temp = TEMPS[tKey(q.lat, q.lon, q.date)];
+for (const q of [...curated, ...imported]) {
+  if (q.temp) continue;
+  const k = tKey(q.lat, q.lon, q.date), n = NORMALS[k];
+  if (n && n[0] != null) q.temp = [n[0], n[1]];
+  else if (TEMPS[k]) q.temp = TEMPS[k];
+}
 // Awards and labels (labels.json, hand-entered with sources) and total ascent
 // and descent in feet (ascent.json, from ascent.mjs). Only set when known.
 const LABELS = fs.existsSync('labels.json') ? JSON.parse(fs.readFileSync('labels.json')).races : {};
@@ -192,6 +199,15 @@ for (const q of [...curated, ...imported]) {
 }
 const races = [...curated, ...imported].map(({ rsu, rsuOnly, ...q }) => { const p = q.region === 'HI' ? hiProj([q.lon, q.lat]) : q.region === 'AK' ? akProj([q.lon, q.lat]) : proj([q.lon, q.lat]); const dm = DEMAND[q.id] || {}; return { ...q, dem: dm.lvl || '', demNote: dm.note || '', wk: dm.wk || 0, x: r(p[0]), y: r(p[1]) }; }).filter(q => p0(q));
 function p0(q) { return q.x >= 0 && q.y >= 0 && q.x <= W && q.y <= H; }
+// Price periods for the season planner: the headline event's RunSignup
+// periods that haven't closed yet, as [opens, closes, fee] (dates YYYY-MM-DD).
+for (const q of races) {
+  const x = rsuOf.get(q.id); if (!x) continue;
+  const ev = x.events.find(e => e.d === (q.dists.includes('full') && x.dists.includes('full') ? 'full' : 'half')) || x.events[0];
+  const ps = (ev.periods || []).filter(p => p.opens && p.closes && p.fee && p.closes.slice(0, 10) >= TODAY)
+    .sort((a, b) => a.opens.localeCompare(b.opens)).map(p => [p.opens.slice(0, 10), p.closes.slice(0, 10), p.fee]);
+  if (ps.length) { q.fees = ps; q.feeDist = ev.d; }
+}
 const reg = JSON.parse(fs.readFileSync('reg.json')); // hand-entered key dates
 // Next registration date for races RunSignup lists, unless reg.json already has
 // dates for that race (hand-entered rows win). One row per race, the next one:

@@ -1,4 +1,4 @@
-// Typical race-day temperatures for races that have none, from Open-Meteo's
+// Fallback typical temps, for races NOAA normals (normals.mjs) can't cover, from Open-Meteo's
 // historical weather API (ERA5 reanalysis; free for non-commercial use, data
 // CC BY 4.0, credited on the page).
 //
@@ -52,6 +52,7 @@ async function fetchKey(key) {
 if (import.meta.url === `file://${process.argv[1]}`) {
   const cache = fs.existsSync(CACHE) ? JSON.parse(fs.readFileSync(CACHE)) : {};
   const races = JSON.parse(fs.readFileSync('data/races-built.json'));
+  // only places NOAA normals can't cover (no station within reach, or Canada)
   const want = [...new Set(races.filter(r => !r.temp).map(r => tempKey(r.lat, r.lon, r.date)))].filter(k => !(k in cache));
   console.log('temps: cached', Object.keys(cache).length, 'missing', want.length);
   let calls = 0, done = 0;
