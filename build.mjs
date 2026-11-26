@@ -182,6 +182,14 @@ const DEMAND = JSON.parse(fs.readFileSync('demand.json'));
 const TEMPS = fs.existsSync('temps.json') ? JSON.parse(fs.readFileSync('temps.json')) : {};
 const tKey = (lat, lon, date) => `${(Math.round(lat * 10) / 10).toFixed(1)},${(Math.round(lon * 10) / 10).toFixed(1)}|${date.slice(5, 10)}`;
 for (const q of [...curated, ...imported]) if (!q.temp && TEMPS[tKey(q.lat, q.lon, q.date)]) q.temp = TEMPS[tKey(q.lat, q.lon, q.date)];
+// Awards and labels (labels.json, hand-entered with sources) and total ascent
+// and descent in feet (ascent.json, from ascent.mjs). Only set when known.
+const LABELS = fs.existsSync('labels.json') ? JSON.parse(fs.readFileSync('labels.json')).races : {};
+const ASCENT = fs.existsSync('ascent.json') ? JSON.parse(fs.readFileSync('ascent.json')) : {};
+for (const q of [...curated, ...imported]) {
+  if (LABELS[q.id]) q.labels = LABELS[q.id].map(l => l.label);
+  if (ASCENT[q.id]) q.asc = [ASCENT[q.id].up, ASCENT[q.id].down];
+}
 const races = [...curated, ...imported].map(({ rsu, rsuOnly, ...q }) => { const p = q.region === 'HI' ? hiProj([q.lon, q.lat]) : q.region === 'AK' ? akProj([q.lon, q.lat]) : proj([q.lon, q.lat]); const dm = DEMAND[q.id] || {}; return { ...q, dem: dm.lvl || '', demNote: dm.note || '', wk: dm.wk || 0, x: r(p[0]), y: r(p[1]) }; }).filter(q => p0(q));
 function p0(q) { return q.x >= 0 && q.y >= 0 && q.x <= W && q.y <= H; }
 const reg = JSON.parse(fs.readFileSync('reg.json')); // hand-entered key dates
@@ -224,5 +232,18 @@ const data = fs.readFileSync('data.js', 'utf8');
 const built = new Date(TODAY + 'T12:00:00Z').toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
 fs.writeFileSync('index.html', tpl.replace('/*DATA*/', () => data).replace('{{BUILT}}', built));
 console.log('data.js', (fs.statSync('data.js').size / 1024).toFixed(0), 'KB', races.length, 'races');
+// Coverage report: upcoming halves and fulls per state and province.
+{
+  const regions = 'AL AK AZ AR CA CO CT DE DC FL GA HI ID IL IN IA KS KY LA ME MD MA MI MN MS MO MT NE NV NH NJ NM NY NC ND OH OK OR PA RI SC SD TN TX UT VT VA WA WV WI WY AB BC MB NB NL NS NT NU ON PE QC SK YT'.split(' ');
+  const up = races.filter(q => q.date >= TODAY);
+  const n = (st, d) => up.filter(q => q.region === st && q.dists.includes(d)).length;
+  const rows = regions.map(st => [st, n(st, 'half'), n(st, 'full'), up.filter(q => q.region === st && q.temp).length, up.filter(q => q.region === st).length]);
+  const thin = rows.filter(([st, h]) => h < 3).map(r => r[0]);
+  const lines = ['# Coverage', '', `Upcoming races per state and province, from the build on ${TODAY}. Regions with fewer than 3 halves: ${thin.join(', ') || 'none'}.`, '', '| Region | Halves | Fulls | With temps | All races |', '|---|---:|---:|---:|---:|',
+    ...rows.map(r => `| ${r[0]} | ${r[1]} | ${r[2]} | ${r[3]} | ${r[4]} |`),
+    `| **Total** | ${up.filter(q => q.dists.includes('half')).length} | ${up.filter(q => q.dists.includes('full')).length} | ${up.filter(q => q.temp).length} | ${up.length} |`, ''];
+  fs.writeFileSync('COVERAGE.md', lines.join('\n'));
+  console.log('coverage: thin half regions', thin.join(' '));
+}
 const off = races.filter(x => x.x < 0 || x.x > W || x.y < 0 || x.y > H);
 console.log('off-map:', off.map(x => x.id));
