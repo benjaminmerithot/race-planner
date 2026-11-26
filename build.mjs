@@ -112,16 +112,55 @@ for (const line of hl) {
 // RunSignup listings (fetch-runsignup.mjs). Curated races keep every field and
 // only gain distances; FindMyMarathon and running.life imports keep their ids
 // (saved stars) and gain the real URL, confirmed date and open status.
+// Stricter than matchRace: RunSignup has many race series that run the same
+// name on the same day in different cities ("Squirrel 5K, 10K, & 13.1M at
+// Augusta, GA"). Same state, within 40 km, date within 3 days (10 for est.
+// dates), and a shared word that is not generic, a distance, or a place name.
+const km = (a, b) => { const R = 6371, t = Math.PI / 180, dl = (b[0] - a[0]) * t, dn = (b[1] - a[1]) * t; const h = Math.sin(dl / 2) ** 2 + Math.cos(a[0] * t) * Math.cos(b[0] * t) * Math.sin(dn / 2) ** 2; return 2 * R * Math.asin(Math.sqrt(h)); };
+const STATE_WORDS = new Set('alabama alaska arizona arkansas california colorado connecticut delaware district columbia florida georgia hawaii idaho illinois indiana iowa kansas kentucky louisiana maine maryland massachusetts michigan minnesota mississippi missouri montana nebraska nevada new hampshire jersey mexico york north carolina dakota ohio oklahoma oregon pennsylvania rhode island south tennessee texas utah vermont virginia washington west wisconsin wyoming'.split(' '));
+const DIST_WORD = w => /^\d+(\.\d+)?(k|m|mi|mile|miles|km)?$/.test(w) || ['k', 'm', 'mi', 'mile', 'miles', 'km', 'half', 'full', 'ultra', 'ultramarathon', 'trail', 'trails', 'series', 'relay', 'kids', 'fun', 'early', 'bird', 'experience', 'at', 'by', 'in', 'on', 'for', 'a', 'the', 'w', 's'].includes(w);
+// one-word town names per state ("Holiday, FL", "Sunrise, FL") read as places in series names
+const TOWN_WORDS = {};
+for (const c of cities) if (c.country === 'US' && !/\s/.test(c.name)) (TOWN_WORDS[c.adminCode] ||= new Set()).add(c.name.toLowerCase());
+// series listings tag the metro in capitals: "Run for Donuts MIAMI"
+const capsTags = name => new Set((name.match(/\b[A-Z]{3,}\b/g) || []).map(w => w.toLowerCase()));
+const rsuWords = (name, cities) => new Set(name.toLowerCase().replace(/['’.]/g, '').split(/[^a-z0-9]+/).filter(w => w && !GEN.has(w) && !DIST_WORD(w) && !STATE_WORDS.has(w) && !cities.has(w) && w.length > 1));
+function rsuMatch(pool, x, g) {
+  const cands = pool.filter(q => q.region === x.region && near(q.date, x.date, q.est ? 10 : 3) && km([q.lat, q.lon], g) <= 40);
+  for (const q of cands) {
+    const cities = new Set([...x.city.toLowerCase().split(/[^a-z]+/), ...q.city.toLowerCase().split(/[^a-z]+/), x.region.toLowerCase(), q.region.toLowerCase()]);
+    // a capitals metro tag on the RunSignup name ("SuperHeroes Run NYC") is a place, not a name
+    for (const w of capsTags(x.name)) if (x.name !== x.name.toUpperCase()) cities.add(w);
+    if (q.rsuOnly) {
+      // two RunSignup listings: same day, same town (or 10 km); series and town words don't count
+      if (q.date !== x.date || (norm(q.city) !== norm(x.city) && km([q.lat, q.lon], g) > 10)) continue;
+      for (const w of [...capsTags(q.name), ...(TOWN_WORDS[x.region] || [])]) cities.add(w);
+      // drop the organizer ("... by Califlow Runs"): one organizer runs many events
+      const bare = n => n.replace(/[,\s-]*\b(hosted |presented )?by\b.*$/i, '');
+      const A = rsuWords(bare(x.name), cities), B = rsuWords(bare(q.name), cities);
+      if ([...A].some(w => B.has(w))) return q;
+      continue;
+    }
+    const A = rsuWords(x.name, cities), B = rsuWords(q.name, cities);
+    if ([...A].some(w => B.has(w))) return q;
+    // "Cedar Rapids Marathon" vs "Cedar Rapids Marathon Weekend": same city and
+    // one name contains the other, or both are only generic and place words
+    const nx = norm(x.name), nq = norm(q.name);
+    if (norm(q.city) === norm(x.city) && x.dists.some(d => (d === 'full' || d === 'half') && q.dists.includes(d)) &&
+      ((A.size === 0 && B.size === 0) || nx.includes(nq) || nq.includes(nx))) return q;
+  }
+  return null;
+}
 const RSU = fs.existsSync('data/runsignup.json') ? JSON.parse(fs.readFileSync('data/runsignup.json')).races : [];
 const rsuOf = new Map(); // race id -> RunSignup record, for the registration feed
 const zipGeo = z => { const x = z && zipcodes.lookup(z.slice(0, 5)); return x && x.latitude ? [x.latitude, x.longitude] : null; };
 let rsuNew = 0, rsuCurated = 0, rsuUpgraded = 0;
+// charity-team and group-reservation pages for races listed elsewhere
+const NOT_A_RACE = /\b(team|charity group|reservation system|students on the go|students run|any city)\b/i;
 for (const x of RSU) {
-  const main = x.dists.includes('full') ? 'full' : 'half';
-  const pool = [...curated, ...imported];
-  const hit = matchRace(pool, x.name, x.city, x.region, x.date, main) ||
-    // a projected (est.) date can be off by a week when a race moves
-    matchRace(pool.filter(q => q.est), x.name, x.city, x.region, x.date, main, 10);
+  if (NOT_A_RACE.test(x.name)) continue;
+  const g = zipGeo(x.zip) || geocode(x.city, x.region);
+  const hit = g && rsuMatch([...curated, ...imported], x, g);
   const addDists = q => x.dists.forEach(d => { if (!q.dists.includes(d)) q.dists.push(d); });
   if (hit && !hit.src && !hit.rsu) { addDists(hit); if (!rsuOf.has(hit.id)) { rsuOf.set(hit.id, x); rsuCurated++; } continue; }
   if (hit) {
@@ -131,9 +170,9 @@ for (const x of RSU) {
     delete hit.src; hit.rsu = x.rsid; if (!rsuOf.has(hit.id)) rsuOf.set(hit.id, x);
     continue;
   }
-  const g = zipGeo(x.zip) || geocode(x.city, x.region); if (!g) { unmatched.push(x.city + ',' + x.region); continue; }
+  if (!g) { unmatched.push(x.city + ',' + x.region); continue; }
   let id = 'r-' + slug(x.name + '-' + x.region); if (imported.some(q => q.id === id)) id += '-' + x.rsid;
-  const q = { id, name: x.name, city: x.city, region: x.region, country: x.country, lat: g[0], lon: g[1], date: x.date, est: false, dists: x.dists.slice(), diff: 0, profile: 'Not rated', note: 'Listed on RunSignup', temp: null, status: x.open ? 'Open' : 'Check race site', url: x.site || x.url, fin: 0, rsu: x.rsid };
+  const q = { id, name: x.name, city: x.city, region: x.region, country: x.country, lat: g[0], lon: g[1], date: x.date, est: false, dists: x.dists.slice(), diff: 0, profile: 'Not rated', note: 'Listed on RunSignup', temp: null, status: x.open ? 'Open' : 'Check race site', url: x.site || x.url, fin: 0, rsu: x.rsid, rsuOnly: true };
   imported.push(q); rsuOf.set(id, x); rsuNew++;
 }
 console.log('runsignup', RSU.length, 'listings:', rsuNew, 'new,', rsuUpgraded, 'imports upgraded,', rsuCurated, 'matched curated');
@@ -143,7 +182,7 @@ const DEMAND = JSON.parse(fs.readFileSync('demand.json'));
 const TEMPS = fs.existsSync('temps.json') ? JSON.parse(fs.readFileSync('temps.json')) : {};
 const tKey = (lat, lon, date) => `${(Math.round(lat * 10) / 10).toFixed(1)},${(Math.round(lon * 10) / 10).toFixed(1)}|${date.slice(5, 10)}`;
 for (const q of [...curated, ...imported]) if (!q.temp && TEMPS[tKey(q.lat, q.lon, q.date)]) q.temp = TEMPS[tKey(q.lat, q.lon, q.date)];
-const races = [...curated, ...imported].map(q => { const p = q.region === 'HI' ? hiProj([q.lon, q.lat]) : q.region === 'AK' ? akProj([q.lon, q.lat]) : proj([q.lon, q.lat]); const dm = DEMAND[q.id] || {}; return { ...q, dem: dm.lvl || '', demNote: dm.note || '', wk: dm.wk || 0, x: r(p[0]), y: r(p[1]) }; }).filter(q => p0(q));
+const races = [...curated, ...imported].map(({ rsu, rsuOnly, ...q }) => { const p = q.region === 'HI' ? hiProj([q.lon, q.lat]) : q.region === 'AK' ? akProj([q.lon, q.lat]) : proj([q.lon, q.lat]); const dm = DEMAND[q.id] || {}; return { ...q, dem: dm.lvl || '', demNote: dm.note || '', wk: dm.wk || 0, x: r(p[0]), y: r(p[1]) }; }).filter(q => p0(q));
 function p0(q) { return q.x >= 0 && q.y >= 0 && q.x <= W && q.y <= H; }
 const reg = JSON.parse(fs.readFileSync('reg.json')); // hand-entered key dates
 // Next registration date for races RunSignup lists, unless reg.json already has
