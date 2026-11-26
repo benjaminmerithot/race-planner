@@ -32,7 +32,9 @@ async function fetchKey(key) {
     const u = `https://archive-api.open-meteo.com/v1/archive?latitude=${lat}&longitude=${lon}&start_date=${from}&end_date=${to}&daily=temperature_2m_min,temperature_2m_max&temperature_unit=fahrenheit&timezone=auto`;
     let j;
     for (let attempt = 1; ; attempt++) {
-      const res = await fetch(u, { headers: { 'User-Agent': 'race-planner-build (personal calendar)' } });
+      let res;
+      try { res = await fetch(u, { headers: { 'User-Agent': 'race-planner-build (personal calendar)' } }); }
+      catch (e) { if (attempt >= 3) throw e; await sleep(5000 * attempt); continue; } // dropped connection
       if (res.ok) { j = await res.json(); break; }
       if (attempt >= 3 || (res.status < 500 && res.status !== 429)) throw new Error(`Open-Meteo ${res.status}: ${(await res.text()).slice(0, 200)}`);
       await sleep(5000 * attempt);
