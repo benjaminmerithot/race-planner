@@ -227,7 +227,7 @@ for (const [id, x] of rsuOf) {
   if (ps.length && ps[0].opens.slice(0, 10) > TODAY) rows.push([ps[0].opens.slice(0, 10), 'Registration opens']);
   for (let i = 0; i + 1 < ps.length; i++) {
     const a = ps[i], b = ps[i + 1];
-    if (a.fee && b.fee && b.fee > a.fee) rows.push([a.closes.slice(0, 10), `Price increases after today (${usd(a.fee)} to ${usd(b.fee)})`]);
+    if (a.fee && b.fee && b.fee > a.fee) rows.push([a.closes.slice(0, 10), `Last day at ${usd(a.fee)} (then ${usd(b.fee)})`]);
   }
   const close = (ev.closes || (ps.length ? ps[ps.length - 1].closes : '') || '').slice(0, 10);
   if (close && close < race.date) rows.push([close, 'Registration closes']);

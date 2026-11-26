@@ -99,7 +99,7 @@ main{padding:22px max(4vw,16px) 36px}
 .bib header::before,.bib header::after{content:"";position:absolute;top:8px;width:7px;height:7px;border-radius:50%;border:2px solid var(--line)}
 .bib header::before{left:8px}.bib header::after{right:8px}
 .bib h2{margin:0;font-size:15px;font-stretch:90%;line-height:1.2}
-.tabs{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;flex:none}.tabs button{appearance:none;border:0;background:transparent;color:var(--mute);font:600 12px Archivo,sans-serif;min-height:28px;padding:0 10px;cursor:pointer;white-space:nowrap}.tabs button[aria-selected=true]{background:var(--ink);color:var(--bg)}
+.bib header:has(.tabs){flex-wrap:wrap}.tabs{display:inline-flex;flex-wrap:wrap;border:1px solid var(--line);border-radius:999px;overflow:hidden;flex:none}.tabs button{appearance:none;border:0;background:transparent;color:var(--mute);font:600 12px Archivo,sans-serif;min-height:28px;padding:0 10px;cursor:pointer;white-space:nowrap}.tabs button[aria-selected=true]{background:var(--ink);color:var(--bg)}
 .bib h2 small{display:block;font-size:12px;color:var(--mute);font-weight:500;font-stretch:100%}
 .bib ol{list-style:none;margin:0;padding:4px 0}
 .bib li{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:10px;align-items:center;padding:6px 16px;cursor:pointer}
@@ -232,7 +232,7 @@ td.num{text-align:right}
     </div>
   </div>
   <div class="feeds">
-      <section class="bib"><header><h2>Registration<small id="regSub">Openings, lotteries and deadlines</small></h2><span class="tabs" role="tablist"><button role="tab" data-tab="key" aria-selected="true">Key dates</button><button role="tab" data-tab="open" aria-selected="false">Open now</button></span></header><ol id="regList"></ol></section>
+      <section class="bib"><header><h2>Registration<small id="regSub">Openings, lotteries and deadlines</small></h2><span class="tabs" role="tablist"><button role="tab" data-tab="opens" aria-selected="true">Opens</button><button role="tab" data-tab="price" aria-selected="false">Price up</button><button role="tab" data-tab="closes" aria-selected="false">Closes</button><button role="tab" data-tab="lottery" aria-selected="false">Lotteries</button><button role="tab" data-tab="open" aria-selected="false">Open now</button></span></header><ol id="regList"></ol></section>
       <section class="bib"><header><h2>Race days coming up<small>Next start lines for your filters</small></h2></header><ol id="raceList"></ol></section>
   </div>
 
@@ -273,6 +273,9 @@ const top=r=>ORDER.find(d=>r.dists.includes(d)&&st.d.has(d))||ORDER.find(d=>r.di
 const extra=r=>(!st.mons.size||st.mons.has(r.date.slice(0,7)))&&(st.course==='any'||(st.course==='fast'?r.diff>=1&&r.diff<=2:st.course==='mod'?r.diff===3:st.course==='hard'?r.diff>=4:r.diff>0))&&POP(r)>=st.pop&&SIZE(r)>=st.size&&(st.entry==='any'||(st.entry==='open'?!['lottery','qualify','fast','soldout'].includes(r.dem)&&!soldOut(r):['lottery','qualify','fast','soldout'].includes(r.dem)))&&tempOk(r)&&!(st.hideSo&&soldOut(r));
 const match=r=>extra(r)&&r.dists.some(d=>st.d.has(d))&&(st.c==='all'||r.country===st.c)&&(!st.saved||saved.has(r.id))&&(!st.q||(r.name+' '+r.city+' '+r.region).toLowerCase().includes(st.q));
 const upcoming=r=>parse(r.date)>=today;
+/* Registration panel tabs: one kind of date each */
+const regCat=l=>/drawing|lottery|qualifier|application/i.test(l)?'lottery':/^(price|last day at)/i.test(l)?'price':/opens|reopens/i.test(l)?'opens':/closes|closed/i.test(l)?'closes':'lottery';
+const RT={opens:['Opens','Registration opening dates','No registration openings match these filters.'],price:['Price up','Last day before the price goes up','No price increases match these filters.'],closes:['Closes','Registration closing dates','No registration closings match these filters.'],lottery:['Lotteries','Lottery, drawing and qualifier dates','No lottery or qualifier dates match these filters.'],open:['Open now','Taking entries now, by race date','']};
 const nextReg=r=>REG.filter(g=>g.id===r.id&&parse(g.d)>=today).sort((a,b)=>a.d<b.d?-1:1)[0];
 const fc=r=>r.country==='US'?'https://forecast.weather.gov/MapClick.php?lat='+r.lat+'&lon='+r.lon:'https://weather.gc.ca/canada_e.html';
 const meter=n=>'<div class="meter" aria-label="Difficulty '+n+' of 5">'+[1,2,3,4,5].map(i=>'<i class="'+(i<=n?'f':'')+'"></i>').join('')+'</div>';
@@ -361,7 +364,7 @@ document.addEventListener('click',e=>{const s=e.target.closest('[data-star]');if
 function focusRace(id){const r=byId[id];if(!r)return;if(view!=='map')setView('map');if(!isHI(r)&&z.k<1.8){z.k=1.8;z.x=GEO.W/2-r.x*z.k;z.y=GEO.H/2-r.y*z.k;clampZ();drawPins()}showTip(id,true);box.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth',block:'nearest'})}
 
 /* ---------- widgets + table ---------- */
-let regAll=false,raceAll=false,regTab='key',tblLimit=150,calSel=null,view='map';
+let regAll=false,raceAll=false,regTab='opens',tblLimit=150,calSel=null,view='map';
 const setView=v=>{view=v;document.querySelectorAll('[data-view]').forEach(x=>x.setAttribute('aria-pressed',x.dataset.view===v));$('#mapView').hidden=v!=='map';$('#listView').hidden=v!=='list';$('#calView').hidden=v!=='cal';$('#planView').hidden=v!=='plan';$('#sortWrap').hidden=v!=='list';if(v==='map')drawPins();else hideTip();if(v==='plan')renderPlan()};
 function li(id,date,title,sub,est){const d=parse(date);return '<li data-race="'+esc(id)+'" tabindex="0"><div class="num"><b>'+d.getDate()+'</b><span>'+MO[d.getMonth()]+'</span></div><div><div class="t">'+esc(title)+'</div><div class="s">'+sub+'</div></div><div class="left">'+esc(until(date))+(est?'<div class="est" style="margin:2px 0 0">est.</div>':'')+'</div></li>'}
 /* ---------- season plan (starred races) ---------- */
@@ -382,7 +385,7 @@ function regItems(r){
   if(fees.length&&fees[0][0]>t0)out.push({d:fees[0][0],k:'reg',label:'Registration opens',sub:usd(fees[0][2])+note});
   for(let i=0;i+1<fees.length;i++)if(fees[i+1][2]>fees[i][2]&&fees[i][1]>=t0)out.push({d:fees[i][1],k:'reg',label:'Last day at '+usd(fees[i][2]),sub:'Then '+usd(fees[i+1][2])+note});
   if(fees.length){const c=fees[fees.length-1][1];if(c>=t0&&c<r.date)out.push({d:c,k:'reg',label:'Registration closes',sub:'Last price '+usd(fees[fees.length-1][2])+note})}
-  REG.filter(g=>g.id===r.id&&g.d>=t0).forEach(g=>{if(out.some(o=>o.d===g.d)&&/^(Price increases|Registration (opens|closes))/.test(g.label))return;out.push({d:g.d,k:'reg',label:g.label,sub:'',est:g.est})});
+  REG.filter(g=>g.id===r.id&&g.d>=t0).forEach(g=>{if(out.some(o=>o.d===g.d)&&/^(Price increases|Last day at|Registration (opens|closes))/.test(g.label))return;out.push({d:g.d,k:'reg',label:g.label,sub:'',est:g.est})});
   return out;
 }
 /* every dated step for one race: registration, training start, taper, race day */
@@ -471,9 +474,11 @@ function render(){
   $('#sub').textContent=RACES.filter(upcoming).length+' races from '+fmtS(first)+' through '+MO[parse(last).getMonth()]+' '+parse(last).getFullYear()+'. Hover a pin for course difficulty, typical race-day temperature and sign-up status.';
   const regs=REG.filter(g=>parse(g.d)>=today&&byId[g.id]&&match(byId[g.id])).sort((a,b)=>a.d<b.d?-1:1);
   const openNow=list.filter(r=>/^Open( now)?$/.test(r.status)).sort((a,b)=>a.date<b.date?-1:1);
-  document.querySelectorAll('.tabs button').forEach(b=>{b.setAttribute('aria-selected',b.dataset.tab===regTab);b.textContent=(b.dataset.tab==='key'?'Key dates ':'Open now ')+(b.dataset.tab==='key'?regs.length:openNow.length)});
-  $('#regSub').textContent=regTab==='key'?'Openings, lotteries and deadlines':'Taking entries now, by race date';
-  $('#regList').innerHTML=regTab==='key'?(regs.length?regs.map(g=>li(g.id,g.d,byId[g.id].name,esc(g.label),g.est)).join(''):'<li class="empty" style="display:block">No dated registration events match these filters.</li>'):(openNow.length?openNow.map(r=>li(r.id,r.date,r.name,'Race day · '+esc(r.city+', '+r.region),r.est)).join(''):'<li class="empty" style="display:block">No open registrations match these filters.</li>');
+  const byCat={opens:[],price:[],closes:[],lottery:[]};regs.forEach(g=>byCat[regCat(g.label)].push(g));
+  document.querySelectorAll('.tabs button').forEach(b=>{const t=b.dataset.tab;b.setAttribute('aria-selected',t===regTab);b.textContent=RT[t][0]+' '+(t==='open'?openNow.length:byCat[t].length)});
+  $('#regSub').textContent=RT[regTab][1];
+  const shownRegs=byCat[regTab]||[];
+  $('#regList').innerHTML=regTab!=='open'?(shownRegs.length?shownRegs.map(g=>li(g.id,g.d,byId[g.id].name,esc(g.label),g.est)).join(''):'<li class="empty" style="display:block">'+RT[regTab][2]+'</li>'):(openNow.length?openNow.map(r=>li(r.id,r.date,r.name,'Race day · '+esc(r.city+', '+r.region),r.est)).join(''):'<li class="empty" style="display:block">No open registrations match these filters.</li>');
   const races=list.slice().sort((a,b)=>a.date<b.date?-1:1);
   $('#raceList').innerHTML=races.length?races.map(r=>li(r.id,r.date,r.name,esc(r.city+', '+r.region)+' · '+r.dists.slice().sort((a,b)=>ORDER.indexOf(b)-ORDER.indexOf(a)).map(d=>DN[d]).join(', '),r.est)).join(''):'<li class="empty" style="display:block">No races match these filters.</li>';
   const sorted=list.slice().sort(st.sort==='pop'?(a,b)=>POP(b)-POP(a)||SIZE(b)-SIZE(a):st.sort==='size'?(a,b)=>SIZE(b)-SIZE(a):st.sort==='name'?(a,b)=>a.name.localeCompare(b.name):st.sort==='diff'?(a,b)=>a.diff-b.diff||(a.date<b.date?-1:1):st.sort==='diffd'?(a,b)=>b.diff-a.diff||(a.date<b.date?-1:1):(a,b)=>a.date<b.date?-1:1);
