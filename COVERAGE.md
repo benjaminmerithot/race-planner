@@ -1,6 +1,6 @@
 # Coverage
 
-Upcoming races per state and province, from the build on 2026-11-27. Regions with fewer than 3 halves: DC, WY, AB, BC, MB, NB, NL, NS, NT, NU, PE, QC, SK, YT.
+Upcoming races per state and province, from the build on 2026-11-28. Regions with fewer than 3 halves: DC, WY, AB, BC, MB, NB, NL, NS, NT, NU, PE, QC, SK, YT.
 
 | Region | Halves | Fulls | With temps | All races |
 |---|---:|---:|---:|---:|
@@ -14,7 +14,7 @@ Upcoming races per state and province, from the build on 2026-11-27. Regions wit
 | DE | 7 | 5 | 8 | 8 |
 | DC | 1 | 1 | 2 | 2 |
 | FL | 365 | 55 | 372 | 372 |
-| GA | 141 | 15 | 145 | 145 |
+| GA | 142 | 15 | 146 | 146 |
 | HI | 6 | 7 | 11 | 11 |
 | ID | 21 | 16 | 27 | 27 |
 | IL | 56 | 15 | 68 | 68 |
@@ -26,18 +26,18 @@ Upcoming races per state and province, from the build on 2026-11-27. Regions wit
 | ME | 13 | 14 | 22 | 22 |
 | MD | 31 | 13 | 38 | 38 |
 | MA | 26 | 8 | 34 | 34 |
-| MI | 86 | 22 | 95 | 95 |
+| MI | 85 | 22 | 94 | 94 |
 | MN | 34 | 14 | 43 | 43 |
 | MS | 6 | 5 | 8 | 8 |
 | MO | 91 | 8 | 94 | 94 |
-| MT | 25 | 14 | 25 | 27 |
-| NE | 29 | 6 | 33 | 33 |
+| MT | 25 | 14 | 27 | 27 |
+| NE | 30 | 6 | 34 | 34 |
 | NV | 40 | 10 | 44 | 44 |
 | NH | 5 | 5 | 10 | 10 |
 | NJ | 48 | 6 | 50 | 50 |
 | NM | 18 | 7 | 21 | 21 |
 | NY | 91 | 27 | 106 | 106 |
-| NC | 159 | 31 | 171 | 171 |
+| NC | 158 | 31 | 170 | 170 |
 | ND | 3 | 2 | 4 | 4 |
 | OH | 78 | 23 | 86 | 86 |
 | OK | 88 | 9 | 88 | 88 |
@@ -46,12 +46,12 @@ Upcoming races per state and province, from the build on 2026-11-27. Regions wit
 | RI | 10 | 6 | 13 | 13 |
 | SC | 40 | 8 | 42 | 42 |
 | SD | 3 | 4 | 7 | 7 |
-| TN | 68 | 10 | 71 | 71 |
-| TX | 365 | 61 | 384 | 384 |
+| TN | 69 | 10 | 72 | 72 |
+| TX | 366 | 62 | 385 | 385 |
 | UT | 48 | 20 | 58 | 58 |
 | VT | 10 | 6 | 12 | 12 |
 | VA | 62 | 15 | 68 | 68 |
-| WA | 128 | 32 | 137 | 137 |
+| WA | 127 | 32 | 136 | 136 |
 | WV | 8 | 6 | 11 | 11 |
 | WI | 45 | 21 | 53 | 53 |
 | WY | 1 | 4 | 4 | 4 |
@@ -68,4 +68,4 @@ Upcoming races per state and province, from the build on 2026-11-27. Regions wit
 | QC | 1 | 6 | 7 | 7 |
 | SK | 0 | 3 | 3 | 3 |
 | YT | 0 | 0 | 0 | 0 |
-| **Total** | 3147 | 747 | 3466 | 3468 |
+| **Total** | 3148 | 748 | 3469 | 3469 |
